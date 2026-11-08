@@ -1,0 +1,12 @@
+# Read automatically by Netlify and Cloudflare Pages.
+# Pictures: kept by browsers for 30 days so they load only once.
+/assets/img/*
+  Cache-Control: public, max-age=2592000
+
+# The page and the picture saver: always check for a newer version.
+/
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+/sw.js
+  Cache-Control: no-cache
