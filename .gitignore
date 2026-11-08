@@ -1,0 +1,12 @@
+# Kept on this computer only — not uploaded to GitHub (the repository is public)
+SETUP.md
+supabase/
+serve.ps1
+
+# Not used by the website anymore
+assets/img/hero.jpg
+
+# Windows / editor clutter
+Thumbs.db
+desktop.ini
+.vscode/
