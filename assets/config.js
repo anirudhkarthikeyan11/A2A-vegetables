@@ -7,5 +7,5 @@ window.A2A_CONFIG = {
 
   // The shop's WhatsApp numbers for basket orders: country code + number, digits only.
   // Each number gets its own button in the basket. Leave the list empty to let the customer pick the chat in WhatsApp.
-  whatsappNumbers: ['918943330616', '917293368630']
+  whatsappNumbers: ['917293368630']
 };

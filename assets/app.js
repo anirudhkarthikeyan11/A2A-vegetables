@@ -655,7 +655,7 @@
     var list = Array.isArray(c.whatsappNumbers) ? c.whatsappNumbers : (c.whatsappNumber ? [c.whatsappNumber] : []);
     return list.map(function (n) { return String(n).replace(/\D/g, ''); }).filter(Boolean);
   }
-  function prettyNumber(n) { // 918943330616 -> +91 89433 30616
+  function prettyNumber(n) { // 919876543210 -> +91 98765 43210
     return n.length === 12 && n.indexOf('91') === 0 ? '+91 ' + n.slice(2, 7) + ' ' + n.slice(7) : '+' + n;
   }
   function openWhatsApp(num) {
