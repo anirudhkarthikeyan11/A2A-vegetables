@@ -390,3 +390,19 @@ body.show-cart #basketFab:active { transform: scale(.94); }
 /* ---------- Popups: blurred backdrop covers the whole screen, even when the popup scrolls ---------- */
 .sheet-bg { position: fixed !important; inset: 0 !important; }
 #dash, #ownerLogin, #addVeg, .sheet-wrap { overscroll-behavior: contain; }
+
+/* ---------- High refresh rate (120 / 144 Hz): keep every frame cheap ---------- */
+/* Vegetable cards: soft frosted look without a live background blur (the biggest cost while scrolling) */
+.veg-grid .glass {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  background: rgba(255, 255, 255, .66);
+}
+/* After a card has faded in, drop the leftover blur filter so it is drawn as a plain layer */
+.veg-grid .animate-in { animation-fill-mode: backwards !important; }
+/* Let the browser skip drawing sections that are off screen */
+#why, #visit { content-visibility: auto; contain-intrinsic-size: auto 720px; }
+/* Background colour blobs: a smaller blur radius is much cheaper to draw */
+.blob { filter: blur(44px); }
+/* Things that move get their own drawing layer */
+#search, .qty-chips .chip-float { backface-visibility: hidden; }
