@@ -1,7 +1,7 @@
 // A2A Vegetables: keeps every picture saved on the device after it loads once,
 // so pictures show instantly afterwards (even offline) and are not downloaded again.
 // If you replace a picture but keep the same file name, change the version below.
-var CACHE = 'a2a-images-v1';
+var CACHE = 'a2a-images-v2';
 
 self.addEventListener('install', function () { self.skipWaiting(); });
 
