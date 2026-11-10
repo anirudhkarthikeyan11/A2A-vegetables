@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700&family=Comic+Neue:wght@400;700&display=swap">
   <link rel="stylesheet" href="assets/styles.css">
   <!-- Change the ?v= number after editing these files so browsers fetch the new version -->
-  <link rel="stylesheet" href="assets/custom.css?v=25">
+  <link rel="stylesheet" href="assets/custom.css?v=26">
 </head>
 <body>
 <div class="relative min-h-screen">
@@ -182,6 +182,27 @@
         </button>
       </div>
       <p id="dashWho" class="mt-1 text-sm text-muted-foreground"></p>
+      <div id="ghBar" class="gh-bar" hidden>
+        <span id="ghStatus"></span>
+        <span class="gh-bar-btns">
+          <button id="ghConnectBtn" type="button" class="gh-btn">🔗 Connect GitHub</button>
+          <button id="ghForget" type="button" class="gh-btn gh-btn-quiet" hidden>Disconnect</button>
+        </span>
+      </div>
+      <div id="ghConnect" class="gh-connect" hidden>
+        <p class="gh-title">Connect GitHub (one time on this device)</p>
+        <ol class="gh-steps">
+          <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → New access key</a> (log in as the website's GitHub account).</li>
+          <li>Name it <b>A2A prices</b>, set <b>Expiration</b> to 1 year, and under <b>Repository access</b> choose <b>Only select repositories → A2A-vegetables</b>.</li>
+          <li>Under <b>Permissions → Repository permissions</b>, set <b>Contents</b> to <b>Read and write</b>. Click <b>Generate token</b> and copy it.</li>
+          <li>Paste it here. It stays only on this device.</li>
+        </ol>
+        <div class="gh-row">
+          <input id="ghToken" class="av-input" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…" aria-label="GitHub access key">
+          <button id="ghSaveKey" type="button" class="gh-btn gh-btn-main">Connect</button>
+        </div>
+        <p id="ghMsg" class="gh-msg" aria-live="polite"></p>
+      </div>
       <div class="dash-head mt-6"><span>Vegetable</span><span>Price (₹)</span><span>In stock</span></div>
       <div id="dashRows" class="dash-rows"></div>
       <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
@@ -280,7 +301,7 @@
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="assets/config.js?v=25"></script>
-<script src="assets/app.js?v=25"></script>
+<script src="assets/config.js?v=26"></script>
+<script src="assets/app.js?v=26"></script>
 </body>
 </html>

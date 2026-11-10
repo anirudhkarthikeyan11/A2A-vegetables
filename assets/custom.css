@@ -406,3 +406,37 @@ body.show-cart #basketFab:active { transform: scale(.94); }
 .blob { filter: blur(44px); }
 /* Things that move get their own drawing layer */
 #search, .qty-chips .chip-float { backface-visibility: hidden; }
+
+/* ---------- Dashboard: Connect GitHub (publish prices to everyone) ---------- */
+.gh-bar {
+  margin-top: .6rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem;
+  padding: .45rem .5rem .45rem .85rem; border-radius: 999px;
+  background: #fffdf7; border: 1px solid #e9dfc4; font-size: .8rem; font-weight: 600; color: #1f5a2a;
+}
+.gh-bar-btns { display: flex; gap: .35rem; }
+.gh-btn {
+  padding: .35rem .85rem; border-radius: 999px; font-size: .78rem; font-weight: 700;
+  background: #1f5a2a; color: #fff; transition: transform .2s ease, background .2s ease;
+}
+.gh-btn:hover { transform: translateY(-1px); background: #2f7d32; }
+.gh-btn-quiet { background: transparent; color: #1f5a2a; border: 1px solid #d9caa0; }
+.gh-btn-quiet:hover { background: #f4efe0; }
+.gh-btn-main { padding: .6rem 1.1rem; font-size: .85rem; flex: none; }
+.gh-connect {
+  margin-top: .6rem; padding: .85rem 1rem; border-radius: 1.1rem;
+  background: #fffdf7; border: 1px solid #e9dfc4; font-size: .78rem; line-height: 1.45;
+  animation: wa-in .35s cubic-bezier(.22, 1, .36, 1);
+}
+.gh-title { font-weight: 700; color: #1f5a2a; margin-bottom: .3rem; font-size: .85rem; }
+.gh-steps { list-style: decimal; padding-left: 1.2rem; display: grid; gap: .2rem; opacity: .85; }
+.gh-steps a { color: #2f7d32; font-weight: 700; text-decoration: underline; }
+.gh-row { display: flex; gap: .5rem; align-items: center; margin-top: .6rem; }
+.gh-row .av-input { margin-top: 0; }
+.gh-msg { margin-top: .35rem; font-size: .75rem; }
+.gh-msg:empty { display: none; }
+.gh-msg.is-error { color: #b42318; font-weight: 600; }
+@media (max-width: 640px) {
+  .gh-bar { font-size: .7rem; padding: .35rem .4rem .35rem .7rem; }
+  .gh-btn { padding: .3rem .7rem; font-size: .72rem; }
+  .gh-connect { font-size: .72rem; padding: .7rem .8rem; }
+}

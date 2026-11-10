@@ -256,6 +256,92 @@
     applyVeggies();
   }
 
+  // ---------- publish to everyone through GitHub (prices.json in the repository) ----------
+  var GH_REPO = String(cfg.githubRepo || '').trim(), GH_BRANCH = cfg.githubBranch || 'main', GH_TOKEN_KEY = 'a2a-gh-token';
+  function ghToken() { try { return localStorage.getItem(GH_TOKEN_KEY) || ''; } catch (e) { return ''; } }
+  function ghMode() { return !sb && !!GH_REPO; }
+  function withPhotoVersion(img) { return img && /^assets\/img\/[^/]+$/.test(img) ? img + '?v=' + PHOTO_VERSION : img; }
+  function plainImg(img) { img = String(img || ''); return img.indexOf('data:') === 0 ? '' : img.split('?')[0]; }
+  // Everyone: load the published prices (if the owner has published any)
+  async function loadPublished() {
+    try {
+      var r = await fetch('prices.json?ts=' + Date.now(), { cache: 'no-store' });
+      if (!r.ok) return false;
+      var data = await r.json();
+      if (!data || !Array.isArray(data.veggies) || !data.veggies.length) return false;
+      allVeg = data.veggies.map(function (v) { return Object.assign({}, v, { price: +v.price, img: withPhotoVersion(v.img) }); });
+      applyVeggies();
+      return true;
+    } catch (e) { return false; }
+  }
+  function b64utf8(s) { return btoa(unescape(encodeURIComponent(s))); }
+  async function gh(path, opts) {
+    var res = await fetch('https://api.github.com/repos/' + GH_REPO + path, Object.assign({}, opts, {
+      headers: { 'Accept': 'application/vnd.github+json', 'Authorization': 'Bearer ' + ghToken(), 'X-GitHub-Api-Version': '2022-11-28' }
+    }));
+    var body = null; try { body = await res.json(); } catch (e) {}
+    return { ok: res.ok, status: res.status, body: body };
+  }
+  function ghError(r) {
+    if (r.status === 401) return 'The GitHub key is wrong or has expired. Connect GitHub again.';
+    if (r.status === 403 || r.status === 404) return 'The GitHub key is not allowed to change this website. Give it “Contents: Read and write” for ' + GH_REPO + '.';
+    return 'GitHub said: ' + ((r.body && r.body.message) || ('error ' + r.status));
+  }
+  // Create or replace one file in the repository (this commit makes GitHub redeploy the site)
+  async function ghPutFile(path, base64, message) {
+    for (var attempt = 0; attempt < 2; attempt++) {
+      var cur = await gh('/contents/' + path + '?ref=' + encodeURIComponent(GH_BRANCH));
+      if (!cur.ok && cur.status !== 404) throw new Error(ghError(cur));
+      var put = await gh('/contents/' + path, { method: 'PUT', body: JSON.stringify({ message: message, content: base64, branch: GH_BRANCH, sha: cur.ok && cur.body ? cur.body.sha : undefined }) });
+      if (put.ok) return put.body;
+      if (put.status !== 409 && put.status !== 422) throw new Error(ghError(put));
+    }
+    throw new Error('Someone else saved at the same moment. Please press Save again.');
+  }
+  async function publishPrices(list, message) {
+    var data = {
+      updated: new Date().toISOString(),
+      veggies: list.map(function (v) {
+        return { name: v.name, local: v.local || '', price: +v.price, unit: v.unit, cat: v.cat, img: plainImg(v.img), desc: v.desc || '', available: v.available !== false, updated: v.updated || null };
+      })
+    };
+    await ghPutFile('prices.json', b64utf8(JSON.stringify(data, null, 2) + '\n'), message);
+    allVeg = data.veggies.map(function (v) { return Object.assign({}, v, { img: withPhotoVersion(v.img) }); });
+    removeKey('localStorage', LOCAL_PRICES_KEY); removeKey('localStorage', LOCAL_ADDED_KEY);
+    applyVeggies();
+  }
+  // Dashboard: "Connect GitHub" (one time per device)
+  function renderGhBar() {
+    $('ghBar').hidden = !ghMode();
+    if (!ghMode()) return;
+    var on = !!ghToken();
+    $('ghStatus').textContent = on ? '🟢 Saving publishes to everyone' : '🟠 Connect GitHub so your changes reach every customer';
+    $('ghConnectBtn').textContent = on ? 'Change key' : '🔗 Connect GitHub';
+    $('ghForget').hidden = !on;
+  }
+  function showGhConnect(open) {
+    $('ghConnect').hidden = !open;
+    if (open) { $('ghMsg').textContent = ''; $('ghMsg').classList.remove('is-error'); setTimeout(function () { $('ghToken').focus(); }, 50); }
+  }
+  $('ghConnectBtn').addEventListener('click', function () { showGhConnect($('ghConnect').hidden); });
+  $('ghForget').addEventListener('click', function () { removeKey('localStorage', GH_TOKEN_KEY); showGhConnect(false); renderGhBar(); openDash(); });
+  $('ghSaveKey').addEventListener('click', async function () {
+    var t = $('ghToken').value.trim(), m = $('ghMsg');
+    function bad(s) { m.textContent = s; m.classList.add('is-error'); }
+    if (!t) return bad('Paste the GitHub key first.');
+    m.classList.remove('is-error'); m.textContent = 'Checking the key…';
+    try {
+      var r = await fetch('https://api.github.com/repos/' + GH_REPO, { headers: { 'Accept': 'application/vnd.github+json', 'Authorization': 'Bearer ' + t } });
+      var body = {}; try { body = await r.json(); } catch (e) {}
+      if (r.status === 401) return bad('That key is not valid. Copy it again from GitHub.');
+      if (!r.ok) return bad('That key cannot see ' + GH_REPO + '. Choose this repository when creating the key.');
+      if (body.permissions && body.permissions.push === false) return bad('That key can only read. Give it “Contents: Read and write”.');
+      try { localStorage.setItem(GH_TOKEN_KEY, t); } catch (e) { return bad('This browser blocked saving the key.'); }
+      $('ghToken').value = ''; showGhConnect(false); openDash();
+      $('dashMsg').textContent = '✓ GitHub connected. From now on, Save publishes to everyone.';
+    } catch (e) { bad('Could not reach GitHub. Check your internet connection.'); }
+  });
+
   // ---------- prices from the database ----------
   function fromRow(r) {
     return { id: r.id, name: r.name, local: r.local, price: +r.price, unit: r.unit, cat: r.cat, img: r.img, desc: r.description, available: r.available, updated: r.updated_at, sort: r.sort };
@@ -294,7 +380,8 @@
   function openDash(newName) {
     if (!isOwner) return;
     $('dashWho').textContent = 'Logged in as ' + (currentUser.email || 'owner') + '. Change a price or tick/untick “In stock”, then press Save.' +
-      (sb ? '' : ' Not connected to a database yet, so changes are saved in this browser only.');
+      (sb ? '' : ghMode() ? (ghToken() ? ' Saved changes go live for every customer in about 1 minute.' : '') : ' Not connected to a database yet, so changes are saved in this browser only.');
+    renderGhBar();
     $('dashMsg').textContent = '';
     $('dashMsg').classList.remove('is-error');
     $('dashRows').innerHTML = allVeg.map(function (v) {
@@ -401,6 +488,18 @@
         }).select();
         if (ins.error) throw new Error(ins.error.message);
         await loadVeggies();
+      } else if (ghMode()) {
+        if (!ghToken()) throw new Error('Connect GitHub first (in the dashboard) so new vegetables go live for every customer.');
+        msg.textContent = 'Uploading picture…';
+        var slug = veg.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'vegetable';
+        var photoPath = 'assets/img/added/' + slug + '-' + Date.now() + '.jpg';
+        await ghPutFile(photoPath, avPhotoData.split(',')[1], 'Add photo for ' + veg.name);
+        veg.img = photoPath;
+        msg.textContent = 'Publishing to everyone…';
+        await publishPrices(allVeg.concat([veg]), 'Add vegetable: ' + veg.name);
+        // the new photo is online after the site redeploys (~1 min); show the local copy until then
+        allVeg.forEach(function (v) { if (v.name === veg.name) v.img = avPhotoData; });
+        applyVeggies();
       } else {
         veg.img = avPhotoData;
         var added = readJSON('localStorage', LOCAL_ADDED_KEY) || [];
@@ -427,6 +526,7 @@
       var v = rows[i].querySelector('input[type=number]').value;
       if (v === '' || isNaN(+v) || +v < 0) { msg.textContent = 'Please enter a valid price.'; rows[i].querySelector('input[type=number]').focus(); return; }
     }
+    msg.classList.remove('is-error');
     btn.disabled = true; msg.textContent = 'Saving…';
     function markSaved() {
       msg.textContent = '✓ Saved ' + rows.length + ' change' + (rows.length > 1 ? 's' : '') + '. The price list is updated.';
@@ -434,6 +534,26 @@
         var p = row.querySelector('input[type=number]'), c = row.querySelector('input[type=checkbox]');
         p.dataset.orig = p.value; c.dataset.orig = String(c.checked); row.classList.remove('changed');
       });
+    }
+    if (ghMode()) {
+      if (!ghToken()) {
+        btn.disabled = false; showGhConnect(true);
+        msg.textContent = 'Connect GitHub once (just above) so new prices go live for every customer.'; msg.classList.add('is-error');
+        return;
+      }
+      msg.textContent = 'Publishing to everyone…';
+      try {
+        var stamp = new Date().toISOString(), edits = {};
+        rows.forEach(function (row) {
+          edits[row.dataset.id] = { price: +row.querySelector('input[type=number]').value, available: row.querySelector('input[type=checkbox]').checked, updated: stamp };
+        });
+        var list = allVeg.map(function (v) { return edits[v.name] ? Object.assign({}, v, edits[v.name]) : v; });
+        await publishPrices(list, 'Update prices: ' + Object.keys(edits).join(', '));
+        markSaved();
+        msg.textContent = '✓ Saved for everyone. The live site shows the new prices in about 1 minute.';
+      } catch (ex) { msg.textContent = ex.message || 'Could not publish.'; msg.classList.add('is-error'); }
+      finally { btn.disabled = false; }
+      return;
     }
     if (!sb) {
       var o = readJSON('localStorage', LOCAL_PRICES_KEY) || {}, now = new Date().toISOString();
@@ -468,6 +588,7 @@
     renderMenuAuth();
     if (!sb) {
       applyLocalOverrides();
+      if (GH_REPO) loadPublished(); // everyone sees the owner's published prices
       var s = readJSON('sessionStorage', LOCAL_SESSION_KEY);
       if (s && isOwnerEmail(s.email)) refreshOwner({ email: OWNER_EMAIL });
       return;
