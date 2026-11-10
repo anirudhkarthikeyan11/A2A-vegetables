@@ -386,3 +386,7 @@ body.show-cart #basketFab:active { transform: scale(.94); }
   #dashSignOut, #dashSave { padding: .6rem 1rem; font-size: .85rem; }
   #dashMsg { font-size: .75rem; }
 }
+
+/* ---------- Popups: blurred backdrop covers the whole screen, even when the popup scrolls ---------- */
+.sheet-bg { position: fixed !important; inset: 0 !important; }
+#dash, #ownerLogin, #addVeg, .sheet-wrap { overscroll-behavior: contain; }
