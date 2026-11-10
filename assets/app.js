@@ -22,6 +22,9 @@
     { name: 'Drumstick', local: 'മുരിങ്ങക്കായ', price: 60, unit: 'kg', cat: 'roots', img: IMG + 'drumstick-bunch.jpg', desc: 'Long drumsticks with fat seeds inside — the classic sambar stick.' },
     { name: 'Mushroom', local: 'കൂൺ', price: 90, unit: '250 g', cat: 'exotic', img: IMG + 'mushroom-board.jpg', desc: 'Button mushrooms in clean, dry trays. Ready for the masala, no washing needed.' }
   ];
+  // Photo version: change this number after replacing photos so every browser loads the new ones at once
+  var PHOTO_VERSION = '2';
+  VEGGIES.forEach(function (v) { v.img += '?v=' + PHOTO_VERSION; });
 
   var CATS = [
     { id: 'all', label: 'All veggies', icon: '🧺' },
