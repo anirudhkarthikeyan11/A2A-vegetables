@@ -23,7 +23,7 @@
     { name: 'Mushroom', local: 'കൂൺ', price: 90, unit: '250 g', cat: 'exotic', img: IMG + 'mushroom-board.jpg', desc: 'Button mushrooms in clean, dry trays. Ready for the masala, no washing needed.' }
   ];
   // Photo version: change this number after replacing photos so every browser loads the new ones at once
-  var PHOTO_VERSION = '2';
+  var PHOTO_VERSION = '3';
   VEGGIES.forEach(function (v) { v.img += '?v=' + PHOTO_VERSION; });
 
   var CATS = [
@@ -635,7 +635,7 @@
     CATS.forEach(function (c) {
       var b = el('<button class="rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 ' +
         (cat === c.id ? 'bg-primary text-primary-foreground shadow-lg scale-105' : 'glass hover:-translate-y-0.5') + '">' + c.icon + ' ' + esc(c.label) + '</button>');
-      b.addEventListener('click', function () { cat = c.id; renderCats(); renderGrid(); });
+      b.addEventListener('click', function () { if (cat === c.id) return; cat = c.id; renderCats(); switchCategory(); });
       catsEl.appendChild(b);
     });
   }
@@ -673,10 +673,27 @@
     });
     return node;
   }
-  function renderGrid() {
+  // Category buttons: current cards fade away, then the new set pops in one after another
+  var switchTimer = 0, outAnims = [];
+  function switchCategory() {
+    if (reduceMotion) { renderGrid(); return; }
+    clearTimeout(switchTimer);
+    outAnims.forEach(function (a) { a.cancel(); });
+    outAnims = Array.prototype.map.call(grid.children, function (n, i) {
+      return n.firstChild.animate(
+        [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(14px) scale(.94)' }],
+        { duration: 170, delay: Math.min(i, 6) * 12, easing: 'cubic-bezier(.4, 0, 1, 1)', fill: 'forwards' });
+    });
+    switchTimer = setTimeout(function () {
+      renderGrid(true);
+      outAnims.forEach(function (a) { a.cancel(); });
+      outAnims = [];
+    }, 200);
+  }
+  function renderGrid(cascade) {
     var q = query.trim().toLowerCase();
     var list = VEGGIES.filter(function (v) { return (cat === 'all' || v.cat === cat) && (v.name + v.local).toLowerCase().indexOf(q) !== -1; });
-    var keep = {}, first = {}, animate = !reduceMotion && grid.children.length > 0;
+    var keep = {}, first = {}, animate = !cascade && !reduceMotion && grid.children.length > 0;
     list.forEach(function (v) { keep[v.name] = 1; });
     // remember where cards that stay on screen are now (for the glide)
     if (animate) Object.keys(cardNodes).forEach(function (k) {
@@ -702,6 +719,15 @@
       if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
       inner.animate([{ transform: 'translate(' + dx + 'px, ' + dy + 'px)' }, { transform: 'translate(0, 0)' }],
         { duration: 550, easing: 'cubic-bezier(.22, 1, .36, 1)' });
+    });
+    // category switch: every card pops up in turn with a soft spring
+    if (cascade && !reduceMotion) list.forEach(function (v, i) {
+      var inner = cardNodes[v.name].firstChild;
+      // clear any earlier entrance/glide on this card (e.g. when buttons are tapped quickly)
+      inner.getAnimations().forEach(function (a) { if (!(typeof CSSTransition !== 'undefined' && a instanceof CSSTransition)) a.cancel(); });
+      inner.animate(
+        [{ opacity: 0, transform: 'translateY(34px) scale(.9)' }, { opacity: 1, offset: .55 }, { opacity: 1, transform: 'none' }],
+        { duration: 620, delay: i * 55, easing: 'cubic-bezier(.34, 1.4, .64, 1)', fill: 'backwards' });
     });
     var empty = $('empty');
     empty.hidden = list.length !== 0;
