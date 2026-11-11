@@ -722,3 +722,50 @@ body.show-cart #basketFab:active { transform: scale(.94); }
   color: #fff !important;
   box-shadow: 5px 8px 16px -5px rgba(31, 79, 38, .5), inset -3px -4px 8px rgba(20, 70, 25, .35), inset 3px 3px 6px rgba(255, 255, 255, .3) !important;
 }
+
+/* ---------- Log in as shop owner: green claymorphism ---------- */
+#ownerForm.glass-pop {
+  background: linear-gradient(160deg, #eef8e6 0%, #dbefcb 60%, #c9e6b4 100%) !important;
+  -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: 18px 24px 48px -12px rgba(31, 79, 38, .5), inset -10px -12px 22px rgba(70, 135, 60, .28), inset 10px 10px 20px rgba(255, 255, 255, .8) !important;
+}
+#ownerForm .glass-orb { display: none; }
+#ownerForm h2, #ownerForm label { color: #1f4f26 !important; }
+#ownerForm .text-muted-foreground { color: #3f6b40 !important; }
+/* email + password boxes: pressed into the clay */
+#ownerForm .glass-field:not([data-ol]) {
+  background: #f1f9ea !important; border: none !important;
+  -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+  box-shadow: inset 3px 4px 9px rgba(46, 104, 46, .25), inset -3px -3px 7px rgba(255, 255, 255, .9) !important;
+}
+#ownerForm .glass-field:not([data-ol]):focus { box-shadow: inset 3px 4px 9px rgba(46, 104, 46, .25), inset -3px -3px 7px rgba(255, 255, 255, .9), 0 0 0 3px rgba(47, 125, 50, .35) !important; }
+/* close button + show-password eye: raised clay */
+#ownerForm [data-ol="close"], #ownerPassToggle {
+  background: #e9f6df !important; border: none !important;
+  -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+  box-shadow: 3px 4px 9px rgba(46, 104, 46, .3), inset -2px -3px 5px rgba(70, 135, 60, .22), inset 2px 2px 4px rgba(255, 255, 255, .95) !important;
+}
+#ownerPassToggle { width: 2.1rem; height: 2.1rem; }
+/* logo sits in the clay */
+#ownerForm img { box-shadow: 3px 4px 9px rgba(31, 79, 38, .3), 0 0 0 3px rgba(255, 255, 255, .8); }
+/* Log in: chunky green clay */
+#ownerSubmit {
+  background: linear-gradient(145deg, #5fb553, #2f7d32) !important;
+  border-radius: 1.4rem !important;
+  box-shadow: 6px 9px 16px -4px rgba(31, 79, 38, .5), inset -4px -5px 10px rgba(20, 70, 25, .35), inset 4px 4px 8px rgba(255, 255, 255, .35) !important;
+}
+#ownerSubmit:active:not(:disabled) { transform: scale(.97); box-shadow: inset 4px 5px 10px rgba(20, 70, 25, .45), inset -3px -3px 6px rgba(255, 255, 255, .25) !important; }
+
+/* ---------- Search box: green clay ---------- */
+#search {
+  background: linear-gradient(160deg, #f1f9ea, #e2f2d6) !important;
+  border: none !important;
+  -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+  color: #1f4f26;
+  box-shadow: 6px 8px 16px -6px rgba(46, 104, 46, .35), inset -3px -4px 8px rgba(70, 135, 60, .2), inset 3px 3px 7px rgba(255, 255, 255, .95) !important;
+}
+#search::placeholder { color: #4f7a4f; opacity: 1; }
+#search:focus {
+  box-shadow: inset 3px 4px 9px rgba(46, 104, 46, .25), inset -3px -3px 7px rgba(255, 255, 255, .9), 0 0 0 3px rgba(47, 125, 50, .3) !important;
+}

@@ -715,6 +715,27 @@
   }
   $('search').addEventListener('input', function (e) { query = e.target.value; renderGrid(); });
 
+  // ---------- search box: typing animation in the placeholder ----------
+  (function () {
+    var box = $('search'), base = 'Search ';
+    var words = ['tomato…', 'potato…', 'onion…', 'palak…', 'carrot…', 'green chilli…', 'brinjal…', 'ginger…'];
+    if (reduceMotion) { box.placeholder = 'Search tomato, potato…'; return; }
+    var w = 0, n = 0, deleting = false, timer = 0;
+    function tick() {
+      // hold still while the customer is using the box
+      if (document.activeElement === box || box.value) { timer = setTimeout(tick, 600); return; }
+      var word = words[w];
+      n += deleting ? -1 : 1;
+      box.placeholder = base + word.slice(0, n) + (deleting || n < word.length ? '|' : '');
+      var wait = deleting ? 45 : 95;
+      if (!deleting && n === word.length) { deleting = true; wait = 1400; }         // finished typing: pause
+      else if (deleting && n === 0) { deleting = false; w = (w + 1) % words.length; wait = 350; } // erased: next word
+      timer = setTimeout(tick, wait);
+    }
+    box.addEventListener('blur', function () { if (!box.value) { clearTimeout(timer); n = 0; deleting = false; tick(); } });
+    tick();
+  })();
+
   // ---------- basket ----------
   // packs[name] = list of amounts added, one entry per "add" (so the shown number = how many times it was added)
   var packs = {};
