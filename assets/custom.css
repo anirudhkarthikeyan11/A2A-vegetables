@@ -440,3 +440,81 @@ body.show-cart #basketFab:active { transform: scale(.94); }
   .gh-btn { padding: .3rem .7rem; font-size: .72rem; }
   .gh-connect { font-size: .72rem; padding: .7rem .8rem; }
 }
+
+/* ---------- Basket: green claymorphism ---------- */
+/* soft, puffy "clay" look: solid pastel green, big round corners, light + dark inner shadows */
+#basketPanel {
+  --clay: #cdeab9;
+  --clay-deep: #b7dfa0;
+  --clay-ink: #1f4f26;
+  background: linear-gradient(160deg, #d9f0c9 0%, var(--clay) 55%, var(--clay-deep) 100%) !important;
+  -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+  border: none !important;
+  border-radius: 2rem !important;
+  color: var(--clay-ink);
+  box-shadow:
+    18px 22px 44px -10px rgba(31, 79, 38, .45),
+    inset -10px -12px 22px rgba(70, 135, 60, .32),
+    inset 10px 10px 20px rgba(255, 255, 255, .75);
+}
+#basketPanel h2 { color: var(--clay-ink); }
+#basketPanel .text-muted-foreground { color: #3f6b40 !important; }
+#basketPanel .text-primary { color: #1f6a2a !important; }
+#basketPanel .border-t { border-color: rgba(31, 79, 38, .15) !important; }
+
+/* round clay buttons: close, − / + / ✕ on each item */
+#basketClose,
+#basketItems [data-b] {
+  background: #dff3d2 !important;
+  color: var(--clay-ink) !important;
+  border-radius: 999px;
+  box-shadow: 4px 5px 10px rgba(46, 104, 46, .28), inset -2px -3px 5px rgba(70, 135, 60, .25), inset 2px 2px 4px rgba(255, 255, 255, .9);
+  transition: transform .2s cubic-bezier(.22, 1, .36, 1), box-shadow .2s ease;
+}
+#basketClose:hover, #basketItems [data-b]:hover { transform: translateY(-1px); }
+#basketClose:active, #basketItems [data-b]:active {
+  transform: scale(.93);
+  box-shadow: inset 3px 3px 6px rgba(46, 104, 46, .3), inset -2px -2px 4px rgba(255, 255, 255, .8);
+}
+#basketItems [data-b="inc"] { background: linear-gradient(145deg, #6cbf5a, #3f8f37) !important; color: #fff !important; }
+#basketItems [data-b="del"] { background: #f6dcd6 !important; color: #b42318 !important; }
+
+/* each item: a clay chip */
+#basketItems .basket-float {
+  background: #e6f6dc !important;
+  border-radius: 1.25rem !important;
+  box-shadow: 6px 8px 14px -4px rgba(46, 104, 46, .28), inset -3px -4px 8px rgba(70, 135, 60, .2), inset 3px 3px 7px rgba(255, 255, 255, .9);
+}
+#basketItems > p { color: #3f6b40; }
+
+/* Clear basket + Send to WhatsApp: chunky clay buttons */
+#basketClear {
+  background: linear-gradient(145deg, #5fb553, #2f7d32) !important;
+  border-radius: 1.4rem !important;
+  box-shadow: 6px 9px 16px -4px rgba(31, 79, 38, .45), inset -4px -5px 10px rgba(20, 70, 25, .35), inset 4px 4px 8px rgba(255, 255, 255, .35);
+  transition: transform .2s cubic-bezier(.22, 1, .36, 1), box-shadow .2s ease, opacity .3s ease;
+}
+#basketClear:hover:not(:disabled) { transform: translateY(-2px); }
+#basketClear:active:not(:disabled) { transform: scale(.97); box-shadow: inset 4px 5px 10px rgba(20, 70, 25, .45), inset -3px -3px 6px rgba(255, 255, 255, .25); }
+#basketPanel .wa-btn {
+  border-radius: 1.4rem;
+  background: linear-gradient(145deg, #3ee07c, #1fb85a);
+  box-shadow: 6px 9px 16px -4px rgba(18, 120, 60, .5), inset -4px -5px 10px rgba(10, 100, 45, .35), inset 4px 4px 8px rgba(255, 255, 255, .4);
+}
+#basketPanel .wa-btn:active:not(:disabled) { box-shadow: inset 4px 5px 10px rgba(10, 100, 45, .45), inset -3px -3px 6px rgba(255, 255, 255, .3); }
+#basketPanel button:disabled { opacity: .55; }
+
+/* name / place boxes: pressed-in clay */
+#basketPanel .wa-input {
+  background: #e6f6dc; border: none; border-radius: 1rem;
+  box-shadow: inset 3px 4px 8px rgba(46, 104, 46, .25), inset -3px -3px 6px rgba(255, 255, 255, .85);
+}
+#basketPanel .wa-input:focus { box-shadow: inset 3px 4px 8px rgba(46, 104, 46, .25), inset -3px -3px 6px rgba(255, 255, 255, .85), 0 0 0 3px rgba(37, 211, 102, .35); }
+#basketPanel .wa-input.invalid { box-shadow: inset 3px 4px 8px rgba(46, 104, 46, .25), 0 0 0 3px rgba(180, 35, 24, .3); }
+/* shop number button: clay chip */
+#basketPanel .wa-choice {
+  background: #e6f6dc; border: none; border-radius: 1.2rem;
+  box-shadow: 5px 7px 12px -4px rgba(46, 104, 46, .3), inset -3px -3px 6px rgba(70, 135, 60, .2), inset 3px 3px 6px rgba(255, 255, 255, .9);
+}
+#basketPanel .wa-choice.done { background: linear-gradient(145deg, #3ee07c, #1fb85a); color: #fff; }
+#basketPanel .wa-choices-title { color: #3f6b40; }
