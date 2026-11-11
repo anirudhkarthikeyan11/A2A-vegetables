@@ -957,3 +957,9 @@ body.show-cart #basketFab:active { box-shadow: inset 5px 6px 12px rgba(20, 70, 2
   transform: scale(.94);
   box-shadow: inset 3px 4px 8px rgba(46, 104, 46, .3), inset -2px -2px 5px rgba(255, 255, 255, .85) !important;
 }
+
+/* ---------- 144 Hz pass 3 ---------- */
+/* background blobs + open-today dot: pause while the browser tab is in the background */
+html.tab-hidden .blob, html.tab-hidden .animate-ping { animation-play-state: paused !important; }
+/* keep each card's layout work to itself when its stepper / price changes */
+.veg-grid > div { contain: layout style; }

@@ -83,6 +83,9 @@
     (root || document).querySelectorAll('.reveal:not(.in)').forEach(function (n) { io.observe(n); });
   }
   observeReveal();
+  // pause the always-running decorations while the browser tab is in the background
+  function syncTabHidden() { document.documentElement.classList.toggle('tab-hidden', document.hidden); }
+  document.addEventListener('visibilitychange', syncTabHidden); syncTabHidden();
 
   // ---------- pause floating animations in sections that are off screen ----------
   if ('IntersectionObserver' in window) {
@@ -746,10 +749,13 @@
     var box = $('search'), base = 'Search ';
     var words = ['tomato…', 'potato…', 'onion…', 'carrot…', 'green chilli…', 'brinjal…', 'ginger…'];
     if (reduceMotion) { box.placeholder = 'Search tomato, potato…'; return; }
-    var w = 0, n = 0, deleting = false, timer = 0;
+    var w = 0, n = 0, deleting = false, timer = 0, boxOnScreen = true;
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { boxOnScreen = es[0].isIntersecting; }).observe(box);
     function tick() {
       // hold still while the customer is using the box
       if (document.activeElement === box || box.value) { timer = setTimeout(tick, 600); return; }
+      // do no work while the box is scrolled off screen or the tab is in the background
+      if (document.hidden || !boxOnScreen) { timer = setTimeout(tick, 800); return; }
       var word = words[w];
       n += deleting ? -1 : 1;
       box.placeholder = base + word.slice(0, n) + (deleting || n < word.length ? '|' : '');
