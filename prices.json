@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-11T11:46:38.210Z",
+  "updated": "2026-11-11T11:53:30.269Z",
   "veggies": [
     {
       "name": "Tomato",
@@ -37,35 +37,35 @@
     {
       "name": "Green Chilli",
       "local": "പച്ചമുളക്",
-      "price": 80,
+      "price": 82,
       "unit": "kg",
       "cat": "staples",
       "img": "assets/img/green-chilli.jpg",
       "desc": "Thin, sharp chillies picked this morning. A little goes a long way in the tempering.",
       "available": true,
-      "updated": null
+      "updated": "2026-11-11T11:53:30.268Z"
     },
     {
       "name": "Brinjal",
       "local": "വഴുതനങ്ങ",
-      "price": 55,
+      "price": 60,
       "unit": "kg",
       "cat": "staples",
       "img": "assets/img/brinjal-plant.png",
       "desc": "Glossy, tight-skinned brinjals — best when the skin springs back at a press.",
       "available": true,
-      "updated": null
+      "updated": "2026-11-11T11:53:30.268Z"
     },
     {
       "name": "Cucumber",
       "local": "വെള്ളരിക്ക",
-      "price": 30,
+      "price": 40,
       "unit": "kg",
       "cat": "staples",
       "img": "assets/img/cucumber-pile.png",
       "desc": "Cool, watery cucumbers for pachadi, raita and the salad box. Sold by weight.",
       "available": true,
-      "updated": null
+      "updated": "2026-11-11T11:53:30.268Z"
     },
     {
       "name": "Capsicum",
