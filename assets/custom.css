@@ -901,3 +901,59 @@ body.show-cart #basketFab:active { box-shadow: inset 5px 6px 12px rgba(20, 70, 2
 #basketCount, #basketFabCount {
   box-shadow: 2px 3px 6px rgba(20, 60, 25, .35), inset -1px -2px 3px rgba(60, 120, 40, .25), inset 1px 1px 3px rgba(255, 255, 255, .7);
 }
+
+/* ---------- Phones: vegetable popup as a compact side-by-side rectangle (photo left, details right) ---------- */
+@media (max-width: 767px) {
+  .sheet-wrap:has(.veg-sheet) { place-items: center !important; padding: .75rem !important; }
+  .veg-sheet.sheet-card.sheet-in {
+    border-radius: 1.6rem !important;
+    max-height: none !important; overflow: hidden !important;
+    animation-name: sheet-in !important; animation-duration: .45s !important;
+  }
+  .is-closing .veg-sheet.sheet-card.sheet-in { animation: sheet-out .28s cubic-bezier(.4, 0, 1, 1) forwards !important; }
+  .veg-sheet .sheet-grab { display: none !important; }
+  .veg-sheet > .grid { grid-template-columns: 40% 60% !important; }
+  /* photo fills the left column top to bottom */
+  .veg-sheet .sheet-img { aspect-ratio: auto !important; height: auto !important; min-height: 100%; }
+  .veg-sheet .sheet-img img { position: absolute; inset: 0; }
+  .veg-sheet .sheet-img .glass { left: .45rem !important; top: .45rem !important; padding: .15rem .5rem !important; font-size: .6rem !important; }
+  /* details: compact */
+  .veg-sheet .sheet-img + * { padding: .8rem .75rem .8rem !important; }
+  .veg-sheet h2 { font-size: 1.15rem !important; padding-right: 1.9rem; }
+  .veg-sheet h2 + p { font-size: .66rem !important; margin-top: .1rem !important; }
+  .veg-sheet h2 + p + p {
+    font-size: .68rem !important; line-height: 1.35 !important; margin-top: .4rem !important;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .veg-sheet .text-4xl { font-size: 1.45rem !important; }
+  .veg-sheet .mt-5 { margin-top: .45rem !important; }
+  .veg-sheet .mt-6 { margin-top: .55rem !important; font-size: .58rem !important; }
+  .veg-sheet .qty-chips { gap: .3rem !important; margin-top: .4rem !important; }
+  .veg-sheet .qty-chips button { padding: .28rem .5rem !important; font-size: .68rem !important; }
+  .veg-sheet .bg-card\/70 { margin-top: .55rem !important; padding: .4rem .65rem !important; border-radius: .9rem !important; }
+  .veg-sheet .bg-card\/70 .text-sm { font-size: .64rem !important; }
+  .veg-sheet .bg-card\/70 .text-2xl { font-size: 1rem !important; }
+  .veg-sheet [data-s="add"] { margin-top: .5rem !important; padding: .55rem .4rem !important; font-size: .74rem !important; border-radius: 1rem !important; }
+  .veg-sheet [data-s="add"] + p { font-size: .55rem !important; margin-top: .4rem !important; line-height: 1.3; }
+  .veg-sheet [data-s="close"] { right: .55rem !important; top: .55rem !important; width: 1.75rem !important; height: 1.75rem !important; font-size: .7rem !important; }
+}
+
+/* very small phones: keep 250 g · 500 g · 1 kg · 2 kg on one line */
+@media (max-width: 359px) {
+  .veg-sheet .qty-chips { gap: .22rem !important; }
+  .veg-sheet .qty-chips button { padding: .24rem .38rem !important; font-size: .6rem !important; }
+  .veg-sheet .bg-card\/70 .text-sm { font-size: .58rem !important; }
+}
+
+/* ---------- ☰ menu button: green claymorphism ---------- */
+#menuBtn {
+  background: linear-gradient(145deg, #eef8e6, #d6edc5) !important;
+  color: #1f5a2a !important;
+  box-shadow: 4px 6px 12px -3px rgba(46, 104, 46, .35), inset -3px -4px 7px rgba(70, 135, 60, .25), inset 3px 3px 6px rgba(255, 255, 255, .95) !important;
+  transition: transform .2s cubic-bezier(.22, 1, .36, 1), box-shadow .2s ease !important;
+}
+#menuBtn:hover { transform: translateY(-1px); }
+#menuBtn:active {
+  transform: scale(.94);
+  box-shadow: inset 3px 4px 8px rgba(46, 104, 46, .3), inset -2px -2px 5px rgba(255, 255, 255, .85) !important;
+}
