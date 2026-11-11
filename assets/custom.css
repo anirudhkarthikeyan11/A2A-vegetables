@@ -518,3 +518,120 @@ body.show-cart #basketFab:active { transform: scale(.94); }
 }
 #basketPanel .wa-choice.done { background: linear-gradient(145deg, #3ee07c, #1fb85a); color: #fff; }
 #basketPanel .wa-choices-title { color: #3f6b40; }
+
+/* ---------- Vegetable cards: green claymorphism ---------- */
+.veg-grid > div > .glass {
+  background: linear-gradient(160deg, #f1f9ea 0%, #e2f2d6 60%, #d3ebc2 100%) !important;
+  border: none !important;
+  border-radius: 1.9rem !important;
+  box-shadow:
+    10px 14px 26px -8px rgba(31, 79, 38, .35),
+    inset -7px -9px 16px rgba(70, 135, 60, .24),
+    inset 7px 7px 14px rgba(255, 255, 255, .85) !important;
+  transition: transform .35s cubic-bezier(.22, 1, .36, 1), box-shadow .35s ease !important;
+}
+.veg-grid > div > .glass:hover {
+  box-shadow:
+    14px 20px 34px -8px rgba(31, 79, 38, .42),
+    inset -7px -9px 16px rgba(70, 135, 60, .24),
+    inset 7px 7px 14px rgba(255, 255, 255, .85) !important;
+}
+/* photo sits pressed into the clay */
+.veg-grid .aspect-square.overflow-hidden {
+  border-radius: 1.4rem !important;
+  box-shadow: inset 3px 4px 10px rgba(31, 79, 38, .25), 0 1px 0 rgba(255, 255, 255, .9);
+}
+.veg-grid .aspect-square.overflow-hidden img { border-radius: 1.4rem; }
+.veg-grid h3 { color: #1f4f26; }
+/* "See details" hover chip: clay */
+.veg-grid .aspect-square .glass {
+  background: rgba(241, 249, 234, .95) !important;
+  box-shadow: 3px 4px 8px rgba(31, 79, 38, .25), inset 2px 2px 4px rgba(255, 255, 255, .9) !important;
+  border: none !important;
+}
+/* + Add: raised clay button */
+.veg-grid [data-act="add"] {
+  background: #e6f6dc !important;
+  color: #1f6a2a !important;
+  border-radius: 1.2rem !important;
+  box-shadow: 4px 6px 12px -3px rgba(46, 104, 46, .3), inset -3px -4px 7px rgba(70, 135, 60, .22), inset 3px 3px 6px rgba(255, 255, 255, .95);
+  transition: transform .2s cubic-bezier(.22, 1, .36, 1), box-shadow .2s ease, background .2s ease !important;
+}
+.veg-grid [data-act="add"]:hover { background: linear-gradient(145deg, #6cbf5a, #3f8f37) !important; color: #fff !important; transform: translateY(-1px); }
+.veg-grid [data-act="add"]:active { transform: scale(.96); box-shadow: inset 3px 4px 8px rgba(46, 104, 46, .3), inset -2px -2px 5px rgba(255, 255, 255, .8); }
+/* − 500 g + stepper: solid green clay */
+.veg-grid .ctl > div {
+  background: linear-gradient(145deg, #5fb553, #2f7d32) !important;
+  border-radius: 1.2rem !important;
+  box-shadow: 4px 6px 12px -3px rgba(31, 79, 38, .45), inset -3px -4px 8px rgba(20, 70, 25, .35), inset 3px 3px 6px rgba(255, 255, 255, .3);
+}
+.veg-grid .ctl [data-act="dec"], .veg-grid .ctl [data-act="inc"] {
+  border-radius: 999px;
+  box-shadow: inset 2px 2px 4px rgba(255, 255, 255, .25), inset -2px -2px 4px rgba(20, 70, 25, .3);
+}
+
+/* ---------- Owner dashboard: green claymorphism ---------- */
+#dash .dash-panel {
+  background: linear-gradient(160deg, #eef8e6 0%, #dff1d1 55%, #cde8b9 100%) !important;
+  border: none !important;
+  box-shadow:
+    18px 24px 48px -12px rgba(31, 79, 38, .45),
+    inset -10px -12px 22px rgba(70, 135, 60, .28),
+    inset 10px 10px 20px rgba(255, 255, 255, .8) !important;
+}
+#dash .dash-panel .text-primary, #dash .dash-panel h2 { color: #1f4f26 !important; }
+#dash .dash-panel .text-muted-foreground { color: #3f6b40 !important; }
+
+/* close button, Add vegetable, Change key / Disconnect, Sign out: raised clay */
+#dash [data-dash="close"].glass,
+#dash .av-add-btn,
+#dash .gh-btn-quiet,
+#dashSignOut {
+  background: #e9f6df !important;
+  border: none !important;
+  color: #1f4f26 !important;
+  box-shadow: 4px 6px 12px -3px rgba(46, 104, 46, .32), inset -3px -4px 7px rgba(70, 135, 60, .22), inset 3px 3px 6px rgba(255, 255, 255, .95) !important;
+  -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+}
+#dash .av-add-icon, #dash .gh-btn:not(.gh-btn-quiet) {
+  background: linear-gradient(145deg, #5fb553, #2f7d32) !important;
+  box-shadow: 2px 3px 6px rgba(31, 79, 38, .4), inset -2px -2px 4px rgba(20, 70, 25, .35), inset 2px 2px 4px rgba(255, 255, 255, .3);
+}
+/* Save prices: chunky green clay */
+#dashSave {
+  background: linear-gradient(145deg, #5fb553, #2f7d32) !important;
+  box-shadow: 6px 9px 16px -4px rgba(31, 79, 38, .5), inset -4px -5px 10px rgba(20, 70, 25, .35), inset 4px 4px 8px rgba(255, 255, 255, .35) !important;
+}
+#dash .av-add-btn:active, #dash .gh-btn:active, #dashSignOut:active, #dashSave:active { transform: scale(.96); }
+
+/* status bar + connect box: soft clay chips */
+#dash .gh-bar, #dash .gh-connect {
+  background: #e9f6df !important;
+  border: none !important;
+  box-shadow: 4px 6px 12px -4px rgba(46, 104, 46, .28), inset -3px -4px 7px rgba(70, 135, 60, .18), inset 3px 3px 6px rgba(255, 255, 255, .9);
+}
+#dash .gh-connect .av-input, #dash .gh-row .av-input {
+  background: #f1f9ea; border: none;
+  box-shadow: inset 3px 4px 8px rgba(46, 104, 46, .22), inset -3px -3px 6px rgba(255, 255, 255, .85);
+}
+
+/* each vegetable row: raised clay chip */
+#dash .dash-panel .dash-row {
+  background: #ecf7e3 !important;
+  border: none !important;
+  border-radius: 1.2rem !important;
+  box-shadow: 5px 7px 12px -5px rgba(46, 104, 46, .3), inset -3px -4px 7px rgba(70, 135, 60, .16), inset 3px 3px 6px rgba(255, 255, 255, .9);
+}
+#dash .dash-panel .dash-row.changed {
+  background: #d4efc0 !important;
+  box-shadow: 5px 7px 12px -5px rgba(46, 104, 46, .4), inset -3px -4px 7px rgba(70, 135, 60, .28), inset 3px 3px 6px rgba(255, 255, 255, .85), 0 0 0 2px rgba(63, 143, 55, .45);
+}
+#dash .dash-thumb { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .6), 2px 3px 6px rgba(31, 79, 38, .25); }
+/* price box: pressed into the clay */
+#dash .dash-price input {
+  background: #f6fbf1; border: none;
+  box-shadow: inset 2px 3px 6px rgba(46, 104, 46, .25), inset -2px -2px 4px rgba(255, 255, 255, .9);
+}
+#dash .dash-price input:focus { box-shadow: inset 2px 3px 6px rgba(46, 104, 46, .25), 0 0 0 3px rgba(47, 125, 50, .35); }
+/* In stock tick: green clay */
+#dash .dash-row input[type="checkbox"] { accent-color: #3f8f37; filter: drop-shadow(1px 2px 2px rgba(31, 79, 38, .3)); }
