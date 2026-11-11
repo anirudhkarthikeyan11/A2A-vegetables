@@ -1,0 +1,203 @@
+{
+  "updated": "2026-11-11T11:46:11.081Z",
+  "veggies": [
+    {
+      "name": "Tomato",
+      "local": "തക്കാളി",
+      "price": 40,
+      "unit": "kg",
+      "cat": "staples",
+      "img": "assets/img/tomato.jpg",
+      "desc": "Firm, ripe tomatoes from this morning's lot. Good for gravies, chutneys and the lunchbox salad.",
+      "available": true,
+      "updated": "2026-11-11T11:46:11.081Z"
+    },
+    {
+      "name": "Onion",
+      "local": "സവാള",
+      "price": 60,
+      "unit": "kg",
+      "cat": "staples",
+      "img": "assets/img/onion-plate.jpg",
+      "desc": "Dry, clean bulbs with the tops trimmed short. Keeps well for weeks in a cool, dark pantry.",
+      "available": true,
+      "updated": "2026-11-11T11:46:11.081Z"
+    },
+    {
+      "name": "Potato",
+      "local": "ഉരുളക്കിഴങ്ങ്",
+      "price": 40,
+      "unit": "kg",
+      "cat": "staples",
+      "img": "assets/img/potato.jpg",
+      "desc": "Firm potatoes brushed clean, no green patches. Boils dry for fries, holds shape in sambar.",
+      "available": true,
+      "updated": "2026-11-11T11:46:11.081Z"
+    },
+    {
+      "name": "Green Chilli",
+      "local": "പച്ചമുളക്",
+      "price": 80,
+      "unit": "kg",
+      "cat": "staples",
+      "img": "assets/img/green-chilli.jpg",
+      "desc": "Thin, sharp chillies picked this morning. A little goes a long way in the tempering.",
+      "available": true,
+      "updated": null
+    },
+    {
+      "name": "Brinjal",
+      "local": "വഴുതനങ്ങ",
+      "price": 55,
+      "unit": "kg",
+      "cat": "staples",
+      "img": "assets/img/brinjal-plant.png",
+      "desc": "Glossy, tight-skinned brinjals — best when the skin springs back at a press.",
+      "available": true,
+      "updated": null
+    },
+    {
+      "name": "Cucumber",
+      "local": "വെള്ളരിക്ക",
+      "price": 30,
+      "unit": "kg",
+      "cat": "staples",
+      "img": "assets/img/cucumber-pile.png",
+      "desc": "Cool, watery cucumbers for pachadi, raita and the salad box. Sold by weight.",
+      "available": true,
+      "updated": null
+    },
+    {
+      "name": "Capsicum",
+      "local": "ക്യാപ്സിക്കം",
+      "price": 60,
+      "unit": "kg",
+      "cat": "staples",
+      "img": "assets/img/capsicum-plant.jpg",
+      "desc": "Crunchy green capsicum with thick walls. Slices clean for stir-fries and biryani.",
+      "available": true,
+      "updated": null
+    },
+    {
+      "name": "Spinach",
+      "local": "പാലക്ക് ചീര",
+      "price": 20,
+      "unit": "bunch",
+      "cat": "greens",
+      "img": "assets/img/spinach-bunch.jpg",
+      "desc": "A fresh bunch of palak with the roots trimmed. Goes soft quickly in a hot pan.",
+      "available": true,
+      "updated": null
+    },
+    {
+      "name": "Cabbage",
+      "local": "മുട്ടക്കോസ്",
+      "price": 35,
+      "unit": "piece",
+      "cat": "greens",
+      "img": "assets/img/cabbage-field.jpg",
+      "desc": "Tight, heavy heads that feel solid in the hand. Crisp for poriyal, soft for a slow curry.",
+      "available": true,
+      "updated": null
+    },
+    {
+      "name": "Coriander",
+      "local": "മല്ലിയില",
+      "price": 15,
+      "unit": "bunch",
+      "cat": "greens",
+      "img": "assets/img/coriander.jpg",
+      "desc": "Fragrant coriander bunches, stems on. Wash, dry and chill to keep the leaves perky.",
+      "available": true,
+      "updated": null
+    },
+    {
+      "name": "Green Mango",
+      "local": "പച്ചമാങ്ങ",
+      "price": 90,
+      "unit": "kg",
+      "cat": "exotic",
+      "img": "assets/img/green-mango.jpg",
+      "desc": "Hard green mangoes for pachadi, pickle and the salt-and-chilli snack.",
+      "available": true,
+      "updated": null
+    },
+    {
+      "name": "Carrot",
+      "local": "കാരറ്റ്",
+      "price": 45,
+      "unit": "kg",
+      "cat": "roots",
+      "img": "assets/img/carrot.jpg",
+      "desc": "Snappy carrots with a bright core. Sweet enough to eat raw, firm enough to grate.",
+      "available": true,
+      "updated": null
+    },
+    {
+      "name": "Beetroot",
+      "local": "ബീറ്റ്റൂട്ട്",
+      "price": 40,
+      "unit": "kg",
+      "cat": "roots",
+      "img": "assets/img/beetroot-cut.jpg",
+      "desc": "Deep-red beetroots with clean rings. Roast or boil — the skin slips right off.",
+      "available": true,
+      "updated": null
+    },
+    {
+      "name": "Garlic",
+      "local": "വെളുത്തുള്ളി",
+      "price": 120,
+      "unit": "kg",
+      "cat": "roots",
+      "img": "assets/img/garlic-bulbs.png",
+      "desc": "Plump, dry bulbs sold by weight so you get exactly the pods you need.",
+      "available": true,
+      "updated": null
+    },
+    {
+      "name": "Ginger",
+      "local": "ഇഞ്ചി",
+      "price": 90,
+      "unit": "kg",
+      "cat": "roots",
+      "img": "assets/img/ginger-root.jpg",
+      "desc": "Fresh ginger with a juicy snap. Grate it for chai, slice it for the tempering.",
+      "available": true,
+      "updated": null
+    },
+    {
+      "name": "Broccoli",
+      "local": "ബ്രോക്കോളി",
+      "price": 120,
+      "unit": "kg",
+      "cat": "exotic",
+      "img": "assets/img/broccoli-florets.jpg",
+      "desc": "Tight green florets, cut to order at the counter. Steam three minutes, no more.",
+      "available": true,
+      "updated": null
+    },
+    {
+      "name": "Drumstick",
+      "local": "മുരിങ്ങക്കായ",
+      "price": 60,
+      "unit": "kg",
+      "cat": "roots",
+      "img": "assets/img/drumstick-bunch.jpg",
+      "desc": "Long drumsticks with fat seeds inside — the classic sambar stick.",
+      "available": true,
+      "updated": null
+    },
+    {
+      "name": "Mushroom",
+      "local": "കൂൺ",
+      "price": 90,
+      "unit": "250 g",
+      "cat": "exotic",
+      "img": "assets/img/mushroom-board.jpg",
+      "desc": "Button mushrooms in clean, dry trays. Ready for the masala, no washing needed.",
+      "available": true,
+      "updated": null
+    }
+  ]
+}
