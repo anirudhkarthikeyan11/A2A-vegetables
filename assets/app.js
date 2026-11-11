@@ -744,7 +744,7 @@
   // ---------- search box: typing animation in the placeholder ----------
   (function () {
     var box = $('search'), base = 'Search ';
-    var words = ['tomato…', 'potato…', 'onion…', 'palak…', 'carrot…', 'green chilli…', 'brinjal…', 'ginger…'];
+    var words = ['tomato…', 'potato…', 'onion…', 'carrot…', 'green chilli…', 'brinjal…', 'ginger…'];
     if (reduceMotion) { box.placeholder = 'Search tomato, potato…'; return; }
     var w = 0, n = 0, deleting = false, timer = 0;
     function tick() {
