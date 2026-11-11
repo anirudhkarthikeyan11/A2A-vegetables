@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-11T11:46:11.081Z",
+  "updated": "2026-11-11T11:46:38.210Z",
   "veggies": [
     {
       "name": "Tomato",
@@ -169,13 +169,13 @@
     {
       "name": "Broccoli",
       "local": "ബ്രോക്കോളി",
-      "price": 120,
+      "price": 220,
       "unit": "kg",
       "cat": "exotic",
       "img": "assets/img/broccoli-florets.jpg",
       "desc": "Tight green florets, cut to order at the counter. Steam three minutes, no more.",
       "available": true,
-      "updated": null
+      "updated": "2026-11-11T11:46:38.210Z"
     },
     {
       "name": "Drumstick",
