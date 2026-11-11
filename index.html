@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700&family=Comic+Neue:wght@400;700&display=swap">
   <link rel="stylesheet" href="assets/styles.css">
   <!-- Change the ?v= number after editing these files so browsers fetch the new version -->
-  <link rel="stylesheet" href="assets/custom.css?v=29">
+  <link rel="stylesheet" href="assets/custom.css?v=31">
 </head>
 <body>
 <div class="relative min-h-screen">
@@ -144,6 +144,32 @@
     <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2.5 3.5h2.6l2.4 11.2a1.6 1.6 0 0 0 1.6 1.3h8.6a1.6 1.6 0 0 0 1.6-1.2l1.6-7.3H6"/></svg>
     <span id="basketFabCount" class="grid h-6 min-w-6 place-items-center rounded-full bg-accent px-1.5 text-xs text-accent-foreground " hidden>0</span>
   </button>
+
+  <!-- Side menu (opens from the ☰ button) -->
+  <div id="sideMenu" class="side-menu" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+    <div class="side-bg" data-sm="close"></div>
+    <nav class="side-panel">
+      <div class="side-head">
+        <img src="assets/img/a2a_logo_circle.png?v=2" alt="" class="side-logo">
+        <div class="side-brand"><b>A2A</b> Vegetables</div>
+        <button type="button" class="side-x" data-sm="close" aria-label="Close menu">✕</button>
+      </div>
+
+      <p class="side-label">Shop</p>
+      <a href="#shop" class="side-item" data-sm="go"><span class="side-ic">🥬</span>Today's price list</a>
+      <a href="#why" class="side-item" data-sm="go"><span class="side-ic">🌿</span>Why us</a>
+      <a href="#visit" class="side-item" data-sm="go"><span class="side-ic">📍</span>Visit us</a>
+      <button type="button" class="side-item" data-sm="basket"><span class="side-ic">🧺</span>My basket<span id="sideCount" class="side-count" hidden>0</span></button>
+
+      <p class="side-label">Shop owner</p>
+      <div id="sideOwner"></div>
+
+      <div class="side-foot">
+        <div class="side-open"><span class="side-dot"></span>Open today · 9 AM – 9 PM</div>
+        <div>A2A Vegetables, Mettupalayam, Palakkad</div>
+      </div>
+    </nav>
+  </div>
 
   <!-- Shop owner login -->
   <div id="ownerLogin" class="fixed inset-0 z-[60] grid place-items-center overflow-y-auto p-4" role="dialog" aria-modal="true" aria-label="Log in as shop owner" hidden>
@@ -301,7 +327,7 @@
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="assets/config.js?v=29"></script>
-<script src="assets/app.js?v=29"></script>
+<script src="assets/config.js?v=31"></script>
+<script src="assets/app.js?v=31"></script>
 </body>
 </html>

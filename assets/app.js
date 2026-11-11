@@ -124,7 +124,8 @@
     bars[2].classList.toggle('-translate-y-1.5', open); bars[2].classList.toggle('-rotate-45', open);
   }
   // ☰ opens the shop owner login (or the dashboard when already logged in as owner)
-  menuBtn.addEventListener('click', function () { openOwnerArea(); });
+  // ☰ opens the side menu (shop links, basket, shop owner login)
+  menuBtn.addEventListener('click', function () { setSide(true); });
   menu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
   document.addEventListener('mousedown', function (e) { if (!menu.hidden && !menuWrap.contains(e.target)) setMenu(false); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) setMenu(false); });
@@ -185,7 +186,30 @@
   function isOwnerEmail(email) { return String(email || '').trim().toLowerCase() === OWNER_EMAIL; }
 
   function openOwnerArea() { if (isOwner) openDash(); else setOwnerLogin(true); }
-  function renderMenuAuth() { menuBtn.setAttribute('aria-label', isOwner ? 'Open owner dashboard' : 'Log in as shop owner'); }
+  function renderMenuAuth() {
+    menuBtn.setAttribute('aria-label', 'Open menu');
+    $('sideOwner').innerHTML = isOwner
+      ? '<button type="button" class="side-item" data-sm="dash"><span class="side-ic">📊</span>Owner dashboard</button>' +
+        '<button type="button" class="side-item side-item-quiet" data-sm="signout"><span class="side-ic">🚪</span>Sign out</button>'
+      : '<button type="button" class="side-item" data-sm="owner"><span class="side-ic">🔑</span>Log in as shop owner</button>';
+  }
+
+  // ---------- side menu ----------
+  var sideMenu = $('sideMenu'), setSide = modal(sideMenu);
+  sideMenu.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-sm]'); if (!t) return;
+    var act = t.dataset.sm;
+    if (act === 'go') e.preventDefault();
+    setSide(false);
+    // wait for the menu to slide away (and the page to unlock) before the next step
+    setTimeout(function () {
+      if (act === 'go') { var target = document.querySelector(t.getAttribute('href')); if (target) target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' }); }
+      else if (act === 'basket') setBasket(true);
+      else if (act === 'owner') setOwnerLogin(true);
+      else if (act === 'dash') openDash();
+      else if (act === 'signout') signOut();
+    }, act === 'close' ? 0 : 320);
+  });
 
   // ---------- shop owner login popup ----------
   var ownerLogin = $('ownerLogin'), setOwnerLoginRaw = modal(ownerLogin);
@@ -721,6 +745,9 @@
       if (pop || old.textContent !== badge.textContent) old.replaceWith(badge);
       $(id).hidden = count === 0; // no "0" when the basket is empty
     });
+    // side menu basket count
+    var sideCount = $('sideCount');
+    if (sideCount) { sideCount.textContent = count; sideCount.hidden = count === 0; }
 
     var items = $('basketItems');
     if (!order.length) items.innerHTML = '<p class="text-muted-foreground">Your basket is empty. Add some fresh picks! 🥬</p>';
