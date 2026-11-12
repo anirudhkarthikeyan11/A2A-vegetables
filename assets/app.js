@@ -764,12 +764,14 @@
       '<span class="text-sm font-semibold">' + fmtQty(v, n) + '</span>' +
       '<button data-act="inc" aria-label="Add ' + esc(v.name) + '" class="h-7 w-7 rounded-full transition hover:bg-primary-foreground/20">+</button></div>';
   }
+  var cardsMade = 0;
   function makeCard(v) {
+    var eager = cardsMade++ < 4; // first row of photos: load straight away
     var node = el(
       '<div class="card-float"><div class="liquid glass group animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-500 cursor-pointer rounded-3xl p-3 transition hover:-translate-y-1.5 hover:shadow-2xl">' +
         '<button type="button" data-act="open" aria-label="See ' + esc(v.name) + ' details and prices" class="block w-full rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-ring">' +
           '<div class="relative aspect-square overflow-hidden rounded-2xl bg-secondary"><div class="absolute inset-0">' +
-            (v.img ? '<img src="' + esc(v.img) + '" alt="' + esc(v.name) + '" loading="lazy" decoding="async" class="h-full w-full object-cover transition duration-700 group-hover:scale-110 group-hover:rotate-2">'
+            (v.img ? '<img src="' + esc(v.img) + '" alt="' + esc(v.name) + '" loading="' + (eager ? 'eager" fetchpriority="high' : 'lazy') + '" decoding="async" width="440" height="440" class="h-full w-full object-cover transition duration-700 group-hover:scale-110 group-hover:rotate-2">'
                    : '<div class="grid h-full place-items-center text-7xl transition group-hover:scale-110">🥬</div>') +
           '</div><span class="pointer-events-none absolute inset-x-3 bottom-3 translate-y-3 rounded-full glass px-3 py-1.5 text-center text-xs font-semibold text-primary opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">See details &amp; quantity →</span></div>' +
         '</button>' +
@@ -843,6 +845,8 @@
         [{ opacity: 0, transform: 'translateY(34px) scale(.9)' }, { opacity: 1, offset: .55 }, { opacity: 1, transform: 'none' }],
         { duration: 620, delay: i * 55, easing: 'cubic-bezier(.34, 1.4, .64, 1)', fill: 'backwards' });
     });
+    // the first row of photos loads straight away (the rest load as you scroll)
+    for (var fi = 0; fi < grid.children.length; fi++) { var fim = grid.children[fi].querySelector('img'); if (!fim) continue; if (fi < 4) { fim.loading = 'eager'; fim.setAttribute('fetchpriority', 'high'); } }
     var empty = $('empty');
     empty.hidden = list.length !== 0;
     empty.textContent = 'No vegetables match "' + query + '".';

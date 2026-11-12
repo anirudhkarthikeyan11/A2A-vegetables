@@ -14,10 +14,12 @@
   <link rel="preload" as="image" href="assets/img/a2a_logo_circle.png?v=2">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700&family=Comic+Neue:wght@400;700&display=swap">
+  <!-- fonts load without blocking the page: text shows at once, then switches to these fonts -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Manrope:wght@400;500;600;700&display=swap"></noscript>
   <link rel="stylesheet" href="assets/styles.css">
   <!-- Change the ?v= number after editing these files so browsers fetch the new version -->
-  <link rel="stylesheet" href="assets/custom.css?v=53">
+  <link rel="stylesheet" href="assets/custom.css?v=55">
 </head>
 <body>
 <div class="relative min-h-screen">
@@ -335,8 +337,9 @@
     </aside>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="assets/config.js?v=53"></script>
-<script src="assets/app.js?v=53"></script>
+<script src="assets/config.js?v=55"></script>
+<!-- the Supabase library is only downloaded when Supabase is set up in config.js (saves ~30 KB and a blocking request) -->
+<script>if (window.A2A_CONFIG && A2A_CONFIG.supabaseUrl && A2A_CONFIG.supabaseAnonKey) document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"><\/script>');</script>
+<script src="assets/app.js?v=55"></script>
 </body>
 </html>
