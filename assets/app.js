@@ -821,8 +821,8 @@
     $('basketNote').textContent = total >= 300 ? '🎉 Free home delivery unlocked (within 3 km)' : 'Add ₹' + Math.ceil(300 - total) + ' more for free delivery';
     $('basketClear').disabled = !order.length;
     $('basketWhatsApp').disabled = !order.length;
-    // basket changed: hide the number buttons so the next send uses the updated order
-    if (!$('waChoices').hidden) $('waChoices').hidden = true;
+    // name + place boxes show only when something is in the basket
+    $('waChoices').hidden = !order.length;
     refreshCardControls();
   }
   $('basketItems').addEventListener('click', function (e) {
@@ -864,24 +864,9 @@
     var w = window.open(url, '_blank', 'noopener');
     if (!w) location.href = url; // popup blocked: open in the same tab
   }
-  // Send to WhatsApp: first ask for name + place, then show the shop number button(s)
-  $('basketWhatsApp').addEventListener('click', function () {
-    if (!order.length) return;
-    var nums = shopNumbers(), box = $('waChoices');
-    if (!box.hidden) { box.hidden = true; return; }
-    if (!nums.length) nums = ['']; // no number set: WhatsApp lets the customer pick the chat
-    box.innerHTML =
-      '<p class="wa-choices-title">Your details</p>' +
-      '<input id="waName" class="wa-input" maxlength="40" autocomplete="name" placeholder="Your name" value="' + esc(customer.name) + '" aria-label="Your name">' +
-      '<input id="waPlace" class="wa-input" maxlength="80" autocomplete="street-address" placeholder="Your place / address" value="' + esc(customer.place) + '" aria-label="Your place or address">' +
-      '<p id="waErr" class="wa-err" aria-live="polite"></p>' +
-      '<p class="wa-choices-title">Send your order to:</p>' + nums.map(function (n) {
-        return '<button type="button" class="wa-choice" data-num="' + n + '"><span>📱 ' + (n ? prettyNumber(n) : 'Choose chat in WhatsApp') + '</span><span class="wa-go">Open ›</span></button>';
-      }).join('');
-    box.hidden = false;
-    var first = !customer.name ? $('waName') : (!customer.place ? $('waPlace') : null);
-    if (first) setTimeout(function () { first.focus(); }, 50);
-  });
+  // Name + place boxes sit above "Send to WhatsApp" (filled in with what the customer typed last time)
+  $('waName').value = customer.name || '';
+  $('waPlace').value = customer.place || '';
   $('waChoices').addEventListener('input', function (e) {
     if (e.target.id !== 'waName' && e.target.id !== 'waPlace') return;
     customer.name = $('waName').value; customer.place = $('waPlace').value;
@@ -889,8 +874,9 @@
     $('waErr').textContent = '';
     writeJSON('localStorage', CUSTOMER_KEY, customer);
   });
-  $('waChoices').addEventListener('click', function (e) {
-    var b = e.target.closest('[data-num]'); if (!b || !order.length) return;
+  // Send to WhatsApp: check name + place, then open the shop's chat with the order
+  $('basketWhatsApp').addEventListener('click', function () {
+    if (!order.length) return;
     var nameEl = $('waName'), placeEl = $('waPlace');
     customer.name = nameEl.value.trim(); customer.place = placeEl.value.trim();
     nameEl.classList.toggle('invalid', !customer.name);
@@ -901,9 +887,7 @@
       return;
     }
     writeJSON('localStorage', CUSTOMER_KEY, customer);
-    openWhatsApp(b.dataset.num);
-    b.classList.add('done');
-    b.querySelector('.wa-go').textContent = '✓ Opened';
+    openWhatsApp(shopNumbers()[0] || '');
   });
 
   var basketOpen = false, savedOv = {};
