@@ -173,7 +173,7 @@
 
   // ---------- shop owner account ----------
   // Only these emails get the dashboard (all lower case).
-  var OWNER_EMAILS = ['anirudhkarthikeyan25@gmail.com', 'surekhamooliyial@gmail.com'];
+  var OWNER_EMAILS = ['anirudhkarthikeyan25@gmail.com', 'surekhamooliyil@gmail.com'];
   // SHA-256 fingerprint of the owner password (the password itself is not stored in the site).
   var OWNER_PASS_SHA256 = '2c679a7e56076005a59081a37b0e4a7be7139fa098d3f181debd1eb228a9f319';
   var LOCAL_SESSION_KEY = 'a2a-owner', LOCAL_PRICES_KEY = 'a2a-local-prices';
