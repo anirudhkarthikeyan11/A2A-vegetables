@@ -172,8 +172,8 @@
   }
 
   // ---------- shop owner account ----------
-  // Only this email gets the dashboard.
-  var OWNER_EMAIL = 'anirudhkarthikeyan25@gmail.com';
+  // Only these emails get the dashboard (all lower case).
+  var OWNER_EMAILS = ['anirudhkarthikeyan25@gmail.com', 'surekhamooliyial@gmail.com'];
   // SHA-256 fingerprint of the owner password (the password itself is not stored in the site).
   var OWNER_PASS_SHA256 = '2c679a7e56076005a59081a37b0e4a7be7139fa098d3f181debd1eb228a9f319';
   var LOCAL_SESSION_KEY = 'a2a-owner', LOCAL_PRICES_KEY = 'a2a-local-prices';
@@ -186,7 +186,7 @@
     var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
     return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
   }
-  function isOwnerEmail(email) { return String(email || '').trim().toLowerCase() === OWNER_EMAIL; }
+  function isOwnerEmail(email) { return OWNER_EMAILS.indexOf(String(email || '').trim().toLowerCase()) !== -1; }
 
   function openOwnerArea() { if (isOwner) openDash(); else setOwnerLogin(true); }
   function renderMenuAuth() {
@@ -244,8 +244,8 @@
       } else {
         if (!window.crypto || !crypto.subtle) { fail('Open the site through serve.ps1 (http://localhost) to log in.'); return; }
         if ((await sha256(pass)) !== OWNER_PASS_SHA256) { fail('Wrong email or password.'); return; }
-        writeJSON('sessionStorage', LOCAL_SESSION_KEY, { email: OWNER_EMAIL });
-        await refreshOwner({ email: OWNER_EMAIL });
+        writeJSON('sessionStorage', LOCAL_SESSION_KEY, { email: email.toLowerCase() });
+        await refreshOwner({ email: email.toLowerCase() });
       }
       $('ownerPass').value = '';
       msg.textContent = '';
@@ -617,7 +617,7 @@
       applyLocalOverrides();
       if (GH_REPO) loadPublished(); // everyone sees the owner's published prices
       var s = readJSON('sessionStorage', LOCAL_SESSION_KEY);
-      if (s && isOwnerEmail(s.email)) refreshOwner({ email: OWNER_EMAIL });
+      if (s && isOwnerEmail(s.email)) refreshOwner({ email: String(s.email).toLowerCase() });
       return;
     }
     loadVeggies();
