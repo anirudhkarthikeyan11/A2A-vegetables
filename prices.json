@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-11T11:53:30.269Z",
+  "updated": "2026-11-12T12:28:08.594Z",
   "veggies": [
     {
       "name": "Tomato",
@@ -37,13 +37,13 @@
     {
       "name": "Green Chilli",
       "local": "പച്ചമുളക്",
-      "price": 82,
+      "price": 90,
       "unit": "kg",
       "cat": "staples",
       "img": "assets/img/green-chilli.jpg",
       "desc": "Thin, sharp chillies picked this morning. A little goes a long way in the tempering.",
       "available": true,
-      "updated": "2026-11-11T11:53:30.268Z"
+      "updated": "2026-11-12T12:28:08.567Z"
     },
     {
       "name": "Brinjal",
@@ -86,8 +86,8 @@
       "cat": "greens",
       "img": "assets/img/spinach-bunch.jpg",
       "desc": "A fresh bunch of palak with the roots trimmed. Goes soft quickly in a hot pan.",
-      "available": true,
-      "updated": null
+      "available": false,
+      "updated": "2026-11-12T12:28:08.567Z"
     },
     {
       "name": "Cabbage",
@@ -119,8 +119,8 @@
       "cat": "exotic",
       "img": "assets/img/green-mango.jpg",
       "desc": "Hard green mangoes for pachadi, pickle and the salt-and-chilli snack.",
-      "available": true,
-      "updated": null
+      "available": false,
+      "updated": "2026-11-12T12:28:08.567Z"
     },
     {
       "name": "Carrot",
@@ -174,8 +174,8 @@
       "cat": "exotic",
       "img": "assets/img/broccoli-florets.jpg",
       "desc": "Tight green florets, cut to order at the counter. Steam three minutes, no more.",
-      "available": true,
-      "updated": "2026-11-11T11:46:38.210Z"
+      "available": false,
+      "updated": "2026-11-12T12:28:08.567Z"
     },
     {
       "name": "Drumstick",
