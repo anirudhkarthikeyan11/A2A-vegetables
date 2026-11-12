@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700&family=Comic+Neue:wght@400;700&display=swap">
   <link rel="stylesheet" href="assets/styles.css">
   <!-- Change the ?v= number after editing these files so browsers fetch the new version -->
-  <link rel="stylesheet" href="assets/custom.css?v=47">
+  <link rel="stylesheet" href="assets/custom.css?v=51">
 </head>
 <body>
 <div class="relative min-h-screen">
@@ -249,16 +249,20 @@
       <p class="text-xs font-semibold uppercase tracking-widest text-primary">Owner dashboard</p>
       <h2 class="mt-1 font-display text-3xl font-semibold leading-tight text-forest">Add a vegetable</h2>
       <div class="av-grid mt-6">
-        <label class="av-photo" for="avPhoto">
-          <input id="avPhoto" type="file" accept="image/*" class="sr-only">
-          <img id="avPreview" alt="" hidden>
-          <span class="av-photo-empty" id="avPhotoEmpty">
-            <span class="av-photo-icon" aria-hidden="true">📷</span>
-            <span class="av-photo-title">Add picture</span>
-            <span class="av-photo-sub">Tap to take a photo or choose one</span>
-          </span>
-          <span class="av-photo-change" id="avPhotoChange" hidden>Change picture</span>
-        </label>
+        <div class="av-photo-col">
+          <label class="av-photo" for="avPhoto">
+            <input id="avPhoto" type="file" accept="image/*" class="sr-only">
+            <img id="avPreview" alt="" hidden>
+            <span class="av-photo-empty" id="avPhotoEmpty">
+              <span class="av-photo-icon" aria-hidden="true">📷</span>
+              <span class="av-photo-title">Add picture <span class="av-opt">(optional)</span></span>
+              <span class="av-photo-sub">Tap to take a photo or choose one. No picture? We'll find one.</span>
+            </span>
+            <span class="av-photo-change" id="avPhotoChange" hidden>Change picture</span>
+          </label>
+          <button id="avFind" type="button" class="av-find">🔍 Find a picture for me</button>
+          <p id="avFindNote" class="av-find-note" aria-live="polite"></p>
+        </div>
         <div class="av-fields">
           <label class="av-label" for="avName">Name</label>
           <input id="avName" class="av-input" required maxlength="40" placeholder="e.g. Beans" autocomplete="off">
@@ -332,7 +336,7 @@
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="assets/config.js?v=47"></script>
-<script src="assets/app.js?v=47"></script>
+<script src="assets/config.js?v=51"></script>
+<script src="assets/app.js?v=51"></script>
 </body>
 </html>

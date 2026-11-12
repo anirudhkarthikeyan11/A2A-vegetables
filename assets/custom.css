@@ -1057,19 +1057,20 @@ html.tab-hidden .blob, html.tab-hidden .animate-ping { animation-play-state: pau
   .veg-grid .ctl span { font-size: .62rem !important; }
 }
 
-/* ---------- Phones: 4 vegetables per row (like computers), extra compact ---------- */
-@media (max-width: 639px) {
-  .veg-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: .4rem !important; }
-  .veg-grid > div > .glass { padding: .28rem !important; border-radius: .95rem !important; }
-  .veg-grid .aspect-square.overflow-hidden, .veg-grid .aspect-square.overflow-hidden img { border-radius: .7rem !important; }
-  .veg-grid .glass > .mt-3:not(.ctl) { margin-top: .3rem !important; padding: 0 .1rem !important; }
-  .veg-grid h3 { font-size: .68rem !important; }
-  .veg-grid h3 + p { font-size: .5rem !important; }
-  .veg-grid .text-right .font-display { font-size: .74rem !important; }
-  .veg-grid .text-right .text-\[11px\] { font-size: .5rem !important; }
-  .veg-grid .ctl { margin-top: .3rem !important; }
-  .veg-grid [data-act="add"] { padding: .3rem 0 !important; font-size: .62rem !important; border-radius: .65rem !important; }
-  .veg-grid .ctl > div { padding: .1rem !important; border-radius: .65rem !important; }
-  .veg-grid .ctl [data-act="dec"], .veg-grid .ctl [data-act="inc"] { width: 1.1rem !important; height: 1.1rem !important; font-size: .7rem; }
-  .veg-grid .ctl span { font-size: .52rem !important; white-space: nowrap; }
+/* ---------- Add a vegetable: "Find a picture for me" ---------- */
+.av-photo-col { display: grid; gap: .5rem; align-content: start; }
+.av-find {
+  width: 100%; padding: .55rem .6rem; border-radius: 1rem; font-size: .8rem; font-weight: 700; color: #1f4f26;
+  background: #e9f6df;
+  box-shadow: 4px 6px 12px -3px rgba(46, 104, 46, .32), inset -3px -4px 7px rgba(70, 135, 60, .22), inset 3px 3px 6px rgba(255, 255, 255, .95);
+  transition: transform .2s cubic-bezier(.22, 1, .36, 1), box-shadow .2s ease;
 }
+.av-find:hover:not(:disabled) { transform: translateY(-1px); }
+.av-find:active:not(:disabled) { transform: scale(.96); box-shadow: inset 3px 4px 8px rgba(46, 104, 46, .3), inset -2px -2px 5px rgba(255, 255, 255, .85); }
+.av-find:disabled { opacity: .6; cursor: progress; }
+.av-find-note { font-size: .7rem; line-height: 1.35; color: #3f6b40; text-align: center; }
+.av-find-note:empty { display: none; }
+
+/* photo credit (for free photos found online) */
+.photo-credit { margin-top: .35rem; font-size: .6rem; line-height: 1.3; text-align: center; color: #4f7a4f; opacity: .8; }
+@media (max-width: 767px) { .veg-sheet .photo-credit { font-size: .5rem !important; margin-top: .25rem !important; } }

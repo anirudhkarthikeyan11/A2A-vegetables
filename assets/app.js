@@ -329,7 +329,7 @@
     var data = {
       updated: new Date().toISOString(),
       veggies: list.map(function (v) {
-        return { name: v.name, local: v.local || '', price: +v.price, unit: v.unit, cat: v.cat, img: plainImg(v.img), desc: v.desc || '', available: v.available !== false, updated: v.updated || null };
+        return { name: v.name, local: v.local || '', price: +v.price, unit: v.unit, cat: v.cat, img: plainImg(v.img), desc: v.desc || '', available: v.available !== false, updated: v.updated || null, credit: v.credit || undefined };
       })
     };
     await ghPutFile('prices.json', b64utf8(JSON.stringify(data, null, 2) + '\n'), message);
@@ -435,23 +435,25 @@
     $('avPreview').hidden = true; $('avPreview').removeAttribute('src');
     $('avPhotoEmpty').hidden = false; $('avPhotoChange').hidden = true;
     $('avMsg').textContent = ''; $('avMsg').classList.remove('is-error');
+    avFound = []; avFoundFor = ''; avFoundIdx = 0; avPhotoCredit = '';
+    $('avFind').textContent = '🔍 Find a picture for me'; $('avFind').disabled = false; $('avFindNote').textContent = '';
     addVeg.querySelectorAll('.invalid').forEach(function (n) { n.classList.remove('invalid'); });
     setAddVeg(true);
     setTimeout(function () { $('avName').focus(); }, 50);
   });
 
-  // Shrink the picture in the browser (max 720px, JPEG) so it loads fast and fits in storage.
+  // Shrink the picture in the browser (max 560px, JPEG) so it loads fast and fits in storage.
   function shrinkImage(file) {
     return new Promise(function (resolve, reject) {
       var url = URL.createObjectURL(file), img = new Image();
       img.onload = function () {
-        var s = Math.min(1, 720 / Math.max(img.naturalWidth, img.naturalHeight));
+        var s = Math.min(1, 560 / Math.max(img.naturalWidth, img.naturalHeight));
         var w = Math.round(img.naturalWidth * s), h = Math.round(img.naturalHeight * s);
         var c = document.createElement('canvas'); c.width = w; c.height = h;
         var ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h); ctx.drawImage(img, 0, 0, w, h);
         URL.revokeObjectURL(url);
-        var data = c.toDataURL('image/jpeg', 0.8);
-        c.toBlob(function (blob) { resolve({ blob: blob, data: data }); }, 'image/jpeg', 0.8);
+        var data = c.toDataURL('image/jpeg', 0.72);
+        c.toBlob(function (blob) { resolve({ blob: blob, data: data }); }, 'image/jpeg', 0.72);
       };
       img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('bad image')); };
       img.src = url;
@@ -476,6 +478,74 @@
   ['dragenter', 'dragover'].forEach(function (t) { avDrop.addEventListener(t, function (e) { e.preventDefault(); avDrop.classList.add('drag'); }); });
   ['dragleave', 'drop'].forEach(function (t) { avDrop.addEventListener(t, function (e) { e.preventDefault(); avDrop.classList.remove('drag'); }); });
   avDrop.addEventListener('drop', function (e) { takePhoto(e.dataTransfer.files && e.dataTransfer.files[0]); });
+  // the owner chose their own picture: forget any found ones
+  $('avPhoto').addEventListener('change', function () { $('avFindNote').textContent = ''; avPhotoCredit = ''; });
+
+  // ---------- no picture? find a free one online ----------
+  // Wikimedia Commons (Wikipedia's photo library): free licences that allow business use.
+  // Most need a photo credit, so the credit is saved and shown in the vegetable's details.
+  var avFound = [], avFoundFor = '', avFoundIdx = 0, avPhotoCredit = '';
+  var OK_LICENCE = /^(public domain|pd|cc0|cc by(-sa)? [0-9.]+|cc by(-sa)?)/i;
+  async function getJSON(url) {
+    var ctl = new AbortController(), t = setTimeout(function () { ctl.abort(); }, 12000);
+    try { var r = await fetch(url, { signal: ctl.signal }); return r.ok ? await r.json() : null; }
+    catch (e) { return null; } finally { clearTimeout(t); }
+  }
+  function plainText(html) { var d = document.createElement('div'); d.innerHTML = html || ''; return (d.textContent || '').replace(/\s+/g, ' ').trim(); }
+  function commonsPhotos(data) {
+    var pages = data && data.query && data.query.pages; if (!pages) return [];
+    return Object.keys(pages).map(function (k) { return pages[k]; })
+      .sort(function (a, b) { return (a.index || 0) - (b.index || 0); })
+      .map(function (p) {
+        var ii = p.imageinfo && p.imageinfo[0]; if (!ii || !ii.thumburl) return null;
+        var meta = ii.extmetadata || {}, lic = plainText(meta.LicenseShortName && meta.LicenseShortName.value);
+        if (!OK_LICENCE.test(lic)) return null;
+        var who = plainText(meta.Artist && meta.Artist.value).slice(0, 60);
+        return { url: ii.thumburl, credit: 'Photo: ' + (who ? who + ', ' : '') + lic + ', via Wikimedia Commons' };
+      }).filter(Boolean);
+  }
+  var COMMONS = 'https://commons.wikimedia.org/w/api.php?format=json&origin=*&action=query&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=640&iiextmetadatafilter=LicenseShortName|Artist';
+  async function findFreePhotos(name) {
+    var out = [];
+    // 1) the main photo of the Wikipedia article (usually the raw vegetable)
+    var wp = await getJSON('https://en.wikipedia.org/w/api.php?format=json&origin=*&action=query&prop=pageimages&piprop=name&redirects=1&titles=' + encodeURIComponent(name));
+    var page = wp && wp.query && wp.query.pages && Object.keys(wp.query.pages).map(function (k) { return wp.query.pages[k]; })[0];
+    if (page && page.pageimage) out = out.concat(commonsPhotos(await getJSON(COMMONS + '&titles=' + encodeURIComponent('File:' + page.pageimage))));
+    // 2) more choices for "Try another"
+    out = out.concat(commonsPhotos(await getJSON(COMMONS + '&generator=search&gsrnamespace=6&gsrlimit=12&gsrsearch=' + encodeURIComponent(name + ' vegetable filetype:bitmap'))));
+    var seen = {};
+    return out.filter(function (x) { if (seen[x.url]) return false; seen[x.url] = 1; return true; });
+  }
+  // load a found photo into the form exactly like a photo the owner picked (shrunk, previewed)
+  async function useFoundPhoto(item) {
+    var r = await fetch(item.url);
+    if (!r.ok) throw new Error('photo not available');
+    var blob = await r.blob();
+    await takePhoto(new File([blob], 'found.jpg', { type: blob.type || 'image/jpeg' }));
+    if (avPhotoBlob) avPhotoCredit = item.credit;
+    return !!avPhotoBlob;
+  }
+  async function showFoundPhoto() {
+    var name = $('avName').value.trim(), note = $('avFindNote'), btn = $('avFind');
+    if (!name) { note.textContent = 'Type the vegetable name first.'; $('avName').focus(); return false; }
+    btn.disabled = true;
+    try {
+      if (avFoundFor !== name.toLowerCase()) {
+        note.textContent = 'Looking for a picture of ' + name + '…';
+        avFound = await findFreePhotos(name); avFoundFor = name.toLowerCase(); avFoundIdx = 0;
+      } else avFoundIdx = (avFoundIdx + 1) % Math.max(avFound.length, 1);
+      while (avFound.length) {
+        try { if (await useFoundPhoto(avFound[avFoundIdx])) break; } catch (e) {}
+        avFound.splice(avFoundIdx, 1); if (avFoundIdx >= avFound.length) avFoundIdx = 0;
+      }
+      if (!avFound.length) { note.textContent = 'No free picture found for "' + name + '". You can add your own, or add it without a picture.'; return false; }
+      note.textContent = 'Free photo ' + (avFoundIdx + 1) + ' of ' + avFound.length + '. ' + avPhotoCredit;
+      btn.textContent = '🔄 Try another picture';
+      return true;
+    } finally { btn.disabled = false; }
+  }
+  $('avFind').addEventListener('click', function () { showFoundPhoto(); });
+  $('avName').addEventListener('input', function () { if (avFoundFor && avFoundFor !== this.value.trim().toLowerCase()) $('avFind').textContent = '🔍 Find a picture for me'; });
 
   $('avForm').addEventListener('submit', async function (e) {
     e.preventDefault();
@@ -485,7 +555,6 @@
     var bad = null;
     addVeg.querySelectorAll('.invalid').forEach(function (n) { n.classList.remove('invalid'); });
     function err(el, t) { if (!bad) { bad = t; el.classList.add('invalid'); if (el.focus) el.focus(); } }
-    if (!avPhotoBlob) err(avDrop, 'Please add a picture.');
     if (!name) err($('avName'), 'Please enter the vegetable name.');
     else if (allVeg.some(function (v) { return v.name.toLowerCase() === name.toLowerCase(); })) err($('avName'), name + ' is already on the price list.');
     if (price === '' || isNaN(+price) || +price < 0) err($('avPrice'), 'Please enter a valid price.');
@@ -503,11 +572,22 @@
     };
     btn.disabled = true; msg.classList.remove('is-error'); msg.textContent = 'Adding…';
     try {
+      // no picture from the owner: find a free one automatically
+      if (!avPhotoBlob) {
+        msg.textContent = 'No picture added: finding one for ' + veg.name + '…';
+        $('avName').value = name;
+        await showFoundPhoto();
+        msg.textContent = avPhotoBlob ? 'Adding…' : 'No picture found: adding ' + veg.name + ' without one…';
+      }
+      if (avPhotoBlob && avPhotoCredit) veg.credit = avPhotoCredit; // photo credit for found photos
       if (sb) {
-        var path = 'veg-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '.jpg';
-        var up = await sb.storage.from('veggie-photos').upload(path, avPhotoBlob, { contentType: 'image/jpeg', upsert: false });
-        if (up.error) throw new Error('Picture upload failed: ' + up.error.message);
-        var imgUrl = sb.storage.from('veggie-photos').getPublicUrl(path).data.publicUrl;
+        var imgUrl = null;
+        if (avPhotoBlob) {
+          var path = 'veg-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '.jpg';
+          var up = await sb.storage.from('veggie-photos').upload(path, avPhotoBlob, { contentType: 'image/jpeg', upsert: false });
+          if (up.error) throw new Error('Picture upload failed: ' + up.error.message);
+          imgUrl = sb.storage.from('veggie-photos').getPublicUrl(path).data.publicUrl;
+        }
         var maxSort = allVeg.reduce(function (m, v) { return Math.max(m, v.sort || 0); }, 0);
         var ins = await sb.from('veggies').insert({
           name: veg.name, local: veg.local, price: veg.price, unit: veg.unit, cat: veg.cat,
@@ -517,18 +597,20 @@
         await loadVeggies();
       } else if (ghMode()) {
         if (!ghToken()) throw new Error('Connect GitHub first (in the dashboard) so new vegetables go live for every customer.');
-        msg.textContent = 'Uploading picture…';
-        var slug = veg.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'vegetable';
-        var photoPath = 'assets/img/added/' + slug + '-' + Date.now() + '.jpg';
-        await ghPutFile(photoPath, avPhotoData.split(',')[1], 'Add photo for ' + veg.name);
-        veg.img = photoPath;
+        veg.img = '';
+        if (avPhotoBlob) {
+          msg.textContent = 'Uploading picture…';
+          var slug = veg.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'vegetable';
+          var photoPath = 'assets/img/added/' + slug + '-' + Date.now() + '.jpg';
+          await ghPutFile(photoPath, avPhotoData.split(',')[1], 'Add photo for ' + veg.name);
+          veg.img = photoPath;
+        }
         msg.textContent = 'Publishing to everyone…';
         await publishPrices(allVeg.concat([veg]), 'Add vegetable: ' + veg.name);
         // the new photo is online after the site redeploys (~1 min); show the local copy until then
-        allVeg.forEach(function (v) { if (v.name === veg.name) v.img = avPhotoData; });
-        applyVeggies();
+        if (avPhotoData) { allVeg.forEach(function (v) { if (v.name === veg.name) v.img = avPhotoData; }); applyVeggies(); }
       } else {
-        veg.img = avPhotoData;
+        veg.img = avPhotoData || '';
         var added = readJSON('localStorage', LOCAL_ADDED_KEY) || [];
         added.push(veg);
         if (!writeJSON('localStorage', LOCAL_ADDED_KEY, added)) throw new Error('This browser is out of space to save more pictures.');
@@ -958,6 +1040,7 @@
                 '<div class="mt-5 flex items-center justify-between rounded-2xl bg-card/70 px-4 py-3"><span data-s="qtytxt" class="text-sm text-muted-foreground"></span><span data-s="total" class="font-display text-2xl font-semibold text-primary"></span></div>' +
                 '<button data-s="add" class="mt-4 w-full rounded-full bg-leaf-gradient py-3.5 font-semibold text-primary-foreground transition hover:-translate-y-0.5 hover:shadow-xl active:scale-95"></button>' +
                 '<p class="mt-3 text-center text-xs text-muted-foreground">Weighed in front of you · Free delivery within 3 km above ₹300</p>' +
+                (v.credit ? '<p class="photo-credit">' + esc(v.credit) + '</p>' : '') +
               '</div></div></div></div>';
       var root = sheetRoot.firstChild;
       root.addEventListener('click', function (e) {
