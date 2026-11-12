@@ -963,3 +963,42 @@ body.show-cart #basketFab:active { box-shadow: inset 5px 6px 12px rgba(20, 70, 2
 html.tab-hidden .blob, html.tab-hidden .animate-ping { animation-play-state: paused !important; }
 /* keep each card's layout work to itself when its stepper / price changes */
 .veg-grid > div { contain: layout style; }
+
+/* ---------- Add a vegetable popup: green claymorphism ---------- */
+#avForm.dash-panel {
+  background: linear-gradient(160deg, #eef8e6 0%, #dbefcb 60%, #c9e6b4 100%) !important;
+  border: none !important;
+  box-shadow: 18px 24px 48px -12px rgba(31, 79, 38, .5), inset -10px -12px 22px rgba(70, 135, 60, .28), inset 10px 10px 20px rgba(255, 255, 255, .8) !important;
+}
+#avForm h2, #avForm .text-primary { color: #1f4f26 !important; }
+#avForm .av-label { color: #2f6b33; }
+/* text boxes and dropdowns: pressed into the clay */
+#avForm .av-input {
+  background: #f1f9ea !important; border: none !important;
+  box-shadow: inset 3px 4px 9px rgba(46, 104, 46, .24), inset -3px -3px 7px rgba(255, 255, 255, .9) !important;
+}
+#avForm .av-input:focus { box-shadow: inset 3px 4px 9px rgba(46, 104, 46, .24), inset -3px -3px 7px rgba(255, 255, 255, .9), 0 0 0 3px rgba(47, 125, 50, .35) !important; }
+#avForm .av-input.invalid { box-shadow: inset 3px 4px 9px rgba(46, 104, 46, .24), 0 0 0 3px rgba(180, 35, 24, .35) !important; }
+/* picture box: a soft clay well */
+#avForm .av-photo {
+  background: #e9f6df !important; border: 2px dashed rgba(63, 143, 55, .45) !important;
+  box-shadow: inset 4px 5px 12px rgba(46, 104, 46, .22), inset -4px -4px 9px rgba(255, 255, 255, .9) !important;
+}
+#avForm .av-photo:hover, #avForm .av-photo.drag { background: #dff2d1 !important; border-color: #2f7d32 !important; }
+#avForm .av-photo.invalid { border-color: #b42318 !important; }
+#avForm .av-photo-icon {
+  display: grid; place-items: center; width: 3.2rem; height: 3.2rem; border-radius: 1rem;
+  background: #f3faec; box-shadow: 3px 4px 9px rgba(46, 104, 46, .28), inset -2px -3px 5px rgba(70, 135, 60, .2), inset 2px 2px 4px rgba(255, 255, 255, .95);
+}
+/* ✕ and Cancel: raised clay */
+#avForm [data-av="close"].glass-field, #avForm [data-av="close"].glass, #avForm button[data-av="close"] {
+  background: #e9f6df !important; border: none !important; color: #1f4f26 !important;
+  -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+  box-shadow: 4px 6px 12px -3px rgba(46, 104, 46, .32), inset -3px -4px 7px rgba(70, 135, 60, .22), inset 3px 3px 6px rgba(255, 255, 255, .95) !important;
+}
+/* + Add vegetable: chunky green clay */
+#avSubmit {
+  background: linear-gradient(145deg, #5fb553, #2f7d32) !important;
+  box-shadow: 6px 9px 16px -4px rgba(31, 79, 38, .5), inset -4px -5px 10px rgba(20, 70, 25, .35), inset 4px 4px 8px rgba(255, 255, 255, .35) !important;
+}
+#avForm button:active { transform: scale(.96); }

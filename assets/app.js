@@ -821,8 +821,10 @@
     $('basketNote').textContent = total >= 300 ? '🎉 Free home delivery unlocked (within 3 km)' : 'Add ₹' + Math.ceil(300 - total) + ' more for free delivery';
     $('basketClear').disabled = !order.length;
     $('basketWhatsApp').disabled = !order.length;
-    // name + place boxes show only when something is in the basket
+    // name + place boxes, Total and the delivery note show only when something is in the basket
     $('waChoices').hidden = !order.length;
+    $('basketTotal').parentElement.hidden = !order.length;
+    $('basketNote').hidden = !order.length;
     refreshCardControls();
   }
   $('basketItems').addEventListener('click', function (e) {
