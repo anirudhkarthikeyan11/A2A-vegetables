@@ -23,7 +23,7 @@
     { name: 'Mushroom', local: 'കൂൺ', price: 90, unit: '250 g', cat: 'exotic', img: IMG + 'mushroom-board.jpg', desc: 'Button mushrooms in clean, dry trays. Ready for the masala, no washing needed.' }
   ];
   // Photo version: change this number after replacing photos so every browser loads the new ones at once
-  var PHOTO_VERSION = '3';
+  var PHOTO_VERSION = '4';
   VEGGIES.forEach(function (v) { v.img += '?v=' + PHOTO_VERSION; });
 
   var CATS = [
@@ -52,6 +52,35 @@
     return n + ' ' + (v.unit === 'bunch' ? 'bunches' : v.unit === 'piece' ? 'pieces' : v.unit + 's');
   }
   function money(n) { return '₹' + (Number.isInteger(n) ? n : n.toFixed(2)); }
+  // A short shop-style description when the owner doesn't write one (picked by category, varied by name)
+  function autoDescription(v) {
+    var n = String(v.name || 'This vegetable'), l = n.toLowerCase();
+    var by = {
+      staples: [
+        n + ' from this morning\'s market: fresh, firm and ready for everyday cooking.',
+        'Fresh ' + l + ', hand-picked at sunrise. Great for curries, stir-fries and the daily meal.',
+        'Clean, fresh ' + l + ' straight from the morning lot. A kitchen staple you can count on.'
+      ],
+      greens: [
+        'A fresh bunch of ' + l + ', washed and trimmed. Cook it the same day for the brightest flavour.',
+        'Tender ' + l + ' picked this morning. Wrap it in a damp cloth and it stays crisp.',
+        'Leafy, green and fresh: ' + l + ' from today\'s lot, perfect for thoran and dal.'
+      ],
+      roots: [
+        'Firm, earthy ' + l + ' picked for freshness. Keeps well in a cool, dry place.',
+        'Fresh ' + l + ' with a clean snap. Perfect for sambar, curries and the tempering.',
+        'Hand-picked ' + l + ', brushed clean. Full of flavour and keeps for days.'
+      ],
+      exotic: [
+        'Fresh ' + l + ', hand-picked for something special: lovely in salads, stir-fries and soups.',
+        'Hand-picked ' + l + ' from this morning\'s lot. A fresh change from the everyday basket.',
+        'Crisp, fresh ' + l + ' chosen with care. Cook it lightly to keep its colour and crunch.'
+      ]
+    };
+    var opts = by[v.cat] || by.staples, h = 0;
+    for (var i = 0; i < l.length; i++) h = (h * 31 + l.charCodeAt(i)) >>> 0;
+    return opts[h % opts.length];
+  }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function byName(n) { for (var i = 0; i < VEGGIES.length; i++) if (VEGGIES[i].name === n) return VEGGIES[i]; }
   function $(id) { return document.getElementById(id); }
@@ -566,7 +595,7 @@
       price: Math.round(+price * 100) / 100,
       unit: $('avUnit').value,
       cat: $('avCat').value,
-      desc: $('avDesc').value.trim(),
+      desc: $('avDesc').value.trim() || autoDescription({ name: name.charAt(0).toUpperCase() + name.slice(1), cat: $('avCat').value, unit: $('avUnit').value }),
       available: true,
       updated: new Date().toISOString()
     };
@@ -1031,7 +1060,7 @@
               '<div class="flex flex-col p-6 md:p-8">' +
                 '<h2 class="font-display text-3xl font-semibold leading-tight text-forest">' + esc(v.name) + '</h2>' +
                 '<p class="mt-1 text-sm text-muted-foreground">' + esc(v.local) + ' · sold by ' + (v.unit === 'kg' ? 'weight' : 'the ' + esc(v.unit)) + '</p>' +
-                '<p class="mt-4 text-sm leading-relaxed text-muted-foreground">' + esc(v.desc) + '</p>' +
+                '<p class="mt-4 text-sm leading-relaxed text-muted-foreground">' + esc(v.desc || autoDescription(v)) + '</p>' +
                 '<div class="mt-5 flex items-end gap-2"><span class="font-display text-4xl font-semibold text-primary">₹' + v.price + '</span><span class="pb-1 text-sm text-muted-foreground">/ ' + esc(v.unit) + '</span></div>' +
                 '<p class="mt-6 text-xs font-semibold uppercase tracking-widest text-primary">Choose your quantity</p>' +
                 '<div class="qty-chips mt-3 flex flex-wrap gap-2">' + opts.map(function (o, t) {

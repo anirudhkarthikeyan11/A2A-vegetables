@@ -912,7 +912,7 @@ body.show-cart #basketFab:active { box-shadow: inset 5px 6px 12px rgba(20, 70, 2
   }
   .is-closing .veg-sheet.sheet-card.sheet-in { animation: sheet-out .28s cubic-bezier(.4, 0, 1, 1) forwards !important; }
   .veg-sheet .sheet-grab { display: none !important; }
-  .veg-sheet > .grid { grid-template-columns: 40% 60% !important; }
+  .veg-sheet > div.grid { grid-template-columns: 40% 60% !important; }
   /* photo fills the left column top to bottom */
   .veg-sheet .sheet-img { aspect-ratio: auto !important; height: auto !important; min-height: 100%; }
   .veg-sheet .sheet-img img { position: absolute; inset: 0; }
@@ -1074,3 +1074,37 @@ html.tab-hidden .blob, html.tab-hidden .animate-ping { animation-play-state: pau
 /* photo credit (for free photos found online) */
 .photo-credit { margin-top: .35rem; font-size: .6rem; line-height: 1.3; text-align: center; color: #4f7a4f; opacity: .8; }
 @media (max-width: 767px) { .veg-sheet .photo-credit { font-size: .5rem !important; margin-top: .25rem !important; } }
+
+/* ---------- Phones: bigger, laptop-like vegetable popup with a perfect round ✕ ---------- */
+@media (max-width: 767px) {
+  .sheet-wrap:has(.veg-sheet) { padding: .6rem !important; }
+  .veg-sheet.sheet-card.sheet-in { width: 100% !important; border-radius: 1.8rem !important; }
+  .veg-sheet > div.grid { grid-template-columns: 44% 56% !important; min-height: min(78vh, 30rem); }
+  .veg-sheet .sheet-img .glass { left: .6rem !important; top: .6rem !important; padding: .22rem .65rem !important; font-size: .68rem !important; }
+  .veg-sheet .sheet-img + * { padding: 1.15rem 1rem 1.1rem !important; display: flex; flex-direction: column; justify-content: center; }
+  .veg-sheet h2 { font-size: 1.6rem !important; padding-right: 2.6rem; }
+  .veg-sheet h2 + p { font-size: .76rem !important; margin-top: .2rem !important; }
+  .veg-sheet h2 + p + p { font-size: .8rem !important; line-height: 1.45 !important; margin-top: .6rem !important; -webkit-line-clamp: 5; }
+  .veg-sheet .text-4xl { font-size: 2.1rem !important; }
+  .veg-sheet .mt-5 { margin-top: .7rem !important; }
+  .veg-sheet .mt-6 { margin-top: .8rem !important; font-size: .64rem !important; }
+  .veg-sheet .qty-chips { gap: .4rem !important; margin-top: .5rem !important; }
+  .veg-sheet .qty-chips button { padding: .4rem .7rem !important; font-size: .8rem !important; }
+  .veg-sheet .bg-card\/70 { margin-top: .75rem !important; padding: .6rem .85rem !important; border-radius: 1.1rem !important; }
+  .veg-sheet .bg-card\/70 .text-sm { font-size: .74rem !important; }
+  .veg-sheet .bg-card\/70 .text-2xl { font-size: 1.3rem !important; }
+  .veg-sheet [data-s="add"] { margin-top: .7rem !important; padding: .8rem .5rem !important; font-size: .9rem !important; border-radius: 1.2rem !important; }
+  .veg-sheet [data-s="add"] + p { font-size: .62rem !important; margin-top: .5rem !important; }
+  /* the ✕: a perfect circle with the cross exactly in the middle */
+  .veg-sheet [data-s="close"] {
+    top: .7rem !important; right: .7rem !important;
+    width: 2.4rem !important; height: 2.4rem !important; min-width: 2.4rem; padding: 0 !important;
+    border-radius: 50% !important; display: grid !important; place-items: center !important;
+    font-size: 1rem !important; line-height: 1 !important; font-weight: 600; z-index: 20;
+  }
+}
+@media (max-width: 359px) {
+  .veg-sheet h2 { font-size: 1.3rem !important; }
+  .veg-sheet .text-4xl { font-size: 1.7rem !important; }
+  .veg-sheet .qty-chips button { padding: .32rem .5rem !important; font-size: .7rem !important; }
+}
