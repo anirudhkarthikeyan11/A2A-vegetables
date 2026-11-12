@@ -1056,3 +1056,20 @@ html.tab-hidden .blob, html.tab-hidden .animate-ping { animation-play-state: pau
   .veg-grid .ctl [data-act="dec"], .veg-grid .ctl [data-act="inc"] { width: 1.35rem !important; height: 1.35rem !important; font-size: .8rem; }
   .veg-grid .ctl span { font-size: .62rem !important; }
 }
+
+/* ---------- Phones: 4 vegetables per row (like computers), extra compact ---------- */
+@media (max-width: 639px) {
+  .veg-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: .4rem !important; }
+  .veg-grid > div > .glass { padding: .28rem !important; border-radius: .95rem !important; }
+  .veg-grid .aspect-square.overflow-hidden, .veg-grid .aspect-square.overflow-hidden img { border-radius: .7rem !important; }
+  .veg-grid .glass > .mt-3:not(.ctl) { margin-top: .3rem !important; padding: 0 .1rem !important; }
+  .veg-grid h3 { font-size: .68rem !important; }
+  .veg-grid h3 + p { font-size: .5rem !important; }
+  .veg-grid .text-right .font-display { font-size: .74rem !important; }
+  .veg-grid .text-right .text-\[11px\] { font-size: .5rem !important; }
+  .veg-grid .ctl { margin-top: .3rem !important; }
+  .veg-grid [data-act="add"] { padding: .3rem 0 !important; font-size: .62rem !important; border-radius: .65rem !important; }
+  .veg-grid .ctl > div { padding: .1rem !important; border-radius: .65rem !important; }
+  .veg-grid .ctl [data-act="dec"], .veg-grid .ctl [data-act="inc"] { width: 1.1rem !important; height: 1.1rem !important; font-size: .7rem; }
+  .veg-grid .ctl span { font-size: .52rem !important; white-space: nowrap; }
+}
