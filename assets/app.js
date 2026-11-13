@@ -961,7 +961,7 @@
     });
     total = Math.round(total * 100) / 100;
     lines.push('', '*Total: ' + money(total) + '*');
-    lines.push(total >= 300 ? '🛵 Free home delivery (within 3 km)' : '(Add ₹' + Math.ceil(300 - total) + ' more for free delivery)');
+    lines.push(total >= 300 ? '🛵 Free home delivery (within 3 km)' : 'Not unlocked free delivery');
     lines.push('', '👤 Name: ' + customer.name, '📍 Place: ' + customer.place);
     return lines.join('\n');
   }
