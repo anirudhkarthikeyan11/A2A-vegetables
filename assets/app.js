@@ -1041,6 +1041,13 @@
 
   // ---------- details sheet ----------
   var sheetRoot = $('sheetRoot'), sheetOv = '';
+  // Sharp (800 px) copies of the built-in photos, used in the vegetable details popup
+  var HD_PHOTOS = ['beetroot-cut', 'brinjal-plant', 'broccoli-florets', 'carrot', 'coriander', 'cucumber-pile', 'drumstick-bunch', 'garlic-bulbs',
+    'ginger-root', 'green-chilli', 'green-mango', 'mushroom-board', 'onion-plate', 'potato', 'spinach-bunch', 'tomato'];
+  function hdPhoto(img) {
+    var m = /^assets\/img\/([a-z-]+)\.(?:jpe?g|png)(?:\?|$)/.exec(img || '');
+    return m && HD_PHOTOS.indexOf(m[1]) !== -1 ? 'assets/img/hd/' + m[1] + '.jpg?v=' + PHOTO_VERSION : '';
+  }
   function openSheet(v) {
     var opts = qtyOptions(v);
     var wasOpen = !!sheetVeg;
@@ -1103,6 +1110,13 @@
         }
       });
       root.querySelector('[data-s="close"]').focus();
+      // show the small photo at once (already saved), then swap in the sharp photo as soon as it arrives
+      var hd = hdPhoto(v.img), pic = root.querySelector('.sheet-img img');
+      if (hd && pic) {
+        var big = new Image(); big.decoding = 'async';
+        big.onload = function () { if (sheetVeg === v && pic.isConnected) pic.src = hd; };
+        big.src = hd;
+      }
     }
     var r = sheetRoot.firstChild;
     r.querySelectorAll('[data-q]').forEach(function (b) { b.className = chipClass({ qty: +b.dataset.q }); });
