@@ -976,8 +976,25 @@
   function prettyNumber(n) { // 919876543210 -> +91 98765 43210
     return n.length === 12 && n.indexOf('91') === 0 ? '+91 ' + n.slice(2, 7) + ' ' + n.slice(7) : '+' + n;
   }
+  // Opens the shop's chat straight away, skipping WhatsApp's "Continue to chat / Use WhatsApp Web" page:
+  // phones open the WhatsApp app directly, computers open WhatsApp Web directly.
   function openWhatsApp(num) {
-    var url = 'https://wa.me/' + num + '?text=' + encodeURIComponent(whatsappOrderText());
+    var q = 'phone=' + num + '&text=' + encodeURIComponent(whatsappOrderText());
+    var isPhone = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (isPhone) {
+      var left = false;
+      var onHide = function () { if (document.hidden) left = true; };
+      document.addEventListener('visibilitychange', onHide);
+      location.href = 'whatsapp://send?' + q;
+      // WhatsApp app not installed: fall back to the web link
+      setTimeout(function () {
+        document.removeEventListener('visibilitychange', onHide);
+        if (!left && !document.hidden) location.href = 'https://api.whatsapp.com/send?' + q;
+      }, 1800);
+      return;
+    }
+    var url = 'https://web.whatsapp.com/send?' + q;
     var w = window.open(url, '_blank', 'noopener');
     if (!w) location.href = url; // popup blocked: open in the same tab
   }
