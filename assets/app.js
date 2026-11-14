@@ -302,7 +302,11 @@
     e.preventDefault(); // use our own message instead of the browser's banner
     installEvt = e;
   });
-  window.addEventListener('appinstalled', function () { writeJSON('localStorage', 'a2a-app-installed', true); hideAppPrompt(); renderMenuApp(); });
+  window.addEventListener('appinstalled', function () {
+    writeJSON('localStorage', 'a2a-app-installed', true);
+    writeJSON('localStorage', 'a2a-app-shell-seen', APP_SHELL_VERSION); // fresh install is already the newest version
+    hideAppPrompt(); renderMenuApp();
+  });
   function appAlreadyOpen() {
     return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
   }
@@ -351,6 +355,56 @@
       }
     });
   }
+  // ---------- "Update the app" message: only inside an already-installed app ----------
+  // Everything inside the app (prices, photos, design) updates by itself. Only the app's icon, name and
+  // opening screen need a reinstall. When those change, raise APP_SHELL_VERSION: everyone who opens an
+  // installed app then sees this message once.
+  var APP_SHELL_VERSION = 2, APP_SHELL_KEY = 'a2a-app-shell-seen';
+  function showAppUpdate() {
+    if (!appAlreadyOpen() || (readJSON('localStorage', APP_SHELL_KEY) || 0) >= APP_SHELL_VERSION || $('appPrompt')) return;
+    var ua = navigator.userAgent;
+    var iOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (!/Android/i.test(ua)) return; // the opening-screen change only matters on Android
+    var steps = iOS
+      ? '1. Press and hold the app icon and remove it.<br>2. Open the site in Safari.<br>3. Tap Share <b>⬆</b> and <b>Add to Home Screen</b>.'
+      : '1. Press and hold the app icon and choose <b>Uninstall</b>.<br>2. Open the site in Chrome.<br>3. Tap <b>☰</b> and <b>Download app</b>.';
+    var t = document.createElement('div');
+    t.id = 'appPrompt'; t.className = 'app-prompt app-prompt-top';
+    t.setAttribute('role', 'dialog'); t.setAttribute('aria-label', 'A new version of the app is ready');
+    t.innerHTML =
+      '<img src="assets/img/app-icon-192.png" alt="" class="app-prompt-icon" width="48" height="48">' +
+      '<div class="app-prompt-text"><b>A new version of the app is ready</b><span>Reinstall once to get the new app opening screen. Everything else is already up to date.</span>' +
+        '<span class="app-prompt-how" hidden>' + steps + '<br><span style="word-break:break-all">' + esc(location.origin + location.pathname) + '</span></span></div>' +
+      '<div class="app-prompt-btns"><button type="button" class="app-prompt-go" data-au="how">Reinstall steps</button>' +
+        '<button type="button" class="app-prompt-no" data-au="later">Later</button></div>' +
+      '<button type="button" class="app-prompt-x" data-au="later" aria-label="Close">✕</button>';
+    document.body.appendChild(t);
+    void t.offsetWidth;
+    t.classList.add('is-in');
+    t.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-au]'); if (!b) return;
+      writeJSON('localStorage', APP_SHELL_KEY, APP_SHELL_VERSION); // show only once
+      if (b.dataset.au === 'how') { t.querySelector('.app-prompt-how').hidden = false; b.textContent = 'Got it'; b.dataset.au = 'later'; return; }
+      hideAppPrompt();
+    });
+  }
+  if (appAlreadyOpen()) setTimeout(showAppUpdate, 1200);
+
+  // ---------- automatic update: when the app (or tab) comes back on screen, load the newest version ----------
+  var myVersion = ((document.querySelector('script[src*="assets/app.js"]') || {}).src || '').replace(/^.*[?&]v=(\d+).*$/, '$1');
+  var lastCheck = Date.now();
+  function checkForUpdate() {
+    if (document.hidden || Date.now() - lastCheck < 60000) return; // at most once a minute
+    lastCheck = Date.now();
+    fetch('index.html?check=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.ok ? r.text() : ''; }).then(function (html) {
+      var m = /assets\/app\.js\?v=(\d+)/.exec(html);
+      // reload only when nothing is open, so a customer's basket screen or the owner's edits are never interrupted
+      if (m && myVersion && m[1] !== myVersion && !sheetVeg && !basketOpen && !order.length && !isOwner) location.reload();
+    }).catch(function () {});
+    if (navigator.serviceWorker && navigator.serviceWorker.getRegistration) navigator.serviceWorker.getRegistration().then(function (r) { if (r) r.update(); });
+  }
+  document.addEventListener('visibilitychange', checkForUpdate);
+  window.addEventListener('focus', checkForUpdate);
   // side menu "Download app": open the browser's install window, or show the steps
   async function menuDownload() { if (!(await installApp())) showAppPrompt('top', true); }
   // customers: show the message at the top shortly after the site opens (not again after "Not now" in this visit)
