@@ -240,6 +240,7 @@
       else if (act === 'owner') setOwnerLogin(true);
       else if (act === 'dash') openDash();
       else if (act === 'signout') signOut();
+      else if (act === 'app') menuDownload();
     }, act === 'close' ? 0 : 320);
   });
 
@@ -280,7 +281,7 @@
       msg.textContent = '';
       setOwnerLogin(false);
       openDash();
-      setTimeout(showAppPrompt, 900); // owner only: offer to download the app
+      setTimeout(function () { showAppPrompt('bottom'); }, 900); // owner: offer to download the app
     } catch (err) {
       fail('Could not reach the server. Check your internet connection.');
     } finally { btn.disabled = false; }
@@ -294,52 +295,69 @@
     }
     renderMenuAuth();
   }
-  // ---------- "Download the app" message: only for the shop owner, right after a correct login ----------
-  var installEvt = null;
+  // ---------- "Download the app" message: customers see it at the top when they open the site,
+  // the owner sees it after a correct login, and the side menu has a "Download app" option ----------
+  var installEvt = null, APP_DISMISS_KEY = 'a2a-app-dismissed';
   window.addEventListener('beforeinstallprompt', function (e) {
-    e.preventDefault(); // no browser install banner for customers; the owner gets our own message instead
+    e.preventDefault(); // use our own message instead of the browser's banner
     installEvt = e;
   });
-  window.addEventListener('appinstalled', function () { writeJSON('localStorage', 'a2a-app-installed', true); hideAppPrompt(); });
+  window.addEventListener('appinstalled', function () { writeJSON('localStorage', 'a2a-app-installed', true); hideAppPrompt(); renderMenuApp(); });
   function appAlreadyOpen() {
     return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
   }
   function hideAppPrompt() {
     var t = $('appPrompt'); if (!t) return;
-    t.classList.remove('is-in');
-    setTimeout(function () { if (t.parentNode && !t.classList.contains('is-in')) t.remove(); }, 350);
+    t.id = ''; t.classList.remove('is-in');
+    setTimeout(function () { if (t.parentNode) t.remove(); }, 400);
   }
-  function showAppPrompt() {
-    if (!isOwner || appAlreadyOpen() || $('appPrompt')) return;
+  function renderMenuApp() { var m = $('sideApp'); if (m) m.hidden = appAlreadyOpen(); }
+  async function installApp() {
+    if (!installEvt) return false;
+    var ev = installEvt; installEvt = null;
+    ev.prompt();
+    try { var choice = await ev.userChoice; if (choice && choice.outcome === 'accepted') hideAppPrompt(); } catch (err) {}
+    return true;
+  }
+  // where: 'top' (customers) or 'bottom' (owner). showHow: open the install steps straight away.
+  function showAppPrompt(where, showHow) {
+    if (appAlreadyOpen()) return;
+    var old = $('appPrompt'); if (old) old.remove();
+    var forOwner = where !== 'top';
     var ua = navigator.userAgent;
     var iOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     var how = iOS ? 'In Safari, tap the Share button <b>⬆</b> and then <b>Add to Home Screen</b>.'
       : 'Open the browser menu <b>⋮</b> and choose <b>Install app</b> or <b>Add to Home screen</b>.';
     var t = document.createElement('div');
-    t.id = 'appPrompt'; t.className = 'app-prompt'; t.setAttribute('role', 'dialog'); t.setAttribute('aria-label', 'Download the A2A app');
+    t.id = 'appPrompt'; t.className = 'app-prompt' + (forOwner ? '' : ' app-prompt-top');
+    t.setAttribute('role', 'dialog'); t.setAttribute('aria-label', 'Download the A2A Vegetables app');
     t.innerHTML =
       '<img src="assets/img/app-icon-192.png" alt="" class="app-prompt-icon" width="48" height="48">' +
-      '<div class="app-prompt-text"><b>Download the A2A app</b><span>Open your shop dashboard in one tap, right from your home screen.</span>' +
-        '<span class="app-prompt-how" hidden>' + how + '</span></div>' +
-      '<div class="app-prompt-btns"><button type="button" class="app-prompt-go" data-ap="go">Download</button>' +
+      '<div class="app-prompt-text"><b>Download the A2A Vegetables app</b><span>' +
+        (forOwner ? 'Open your shop dashboard in one tap, right from your home screen.' : 'See today\'s fresh vegetables and order in one tap, right from your home screen.') +
+        '</span><span class="app-prompt-how"' + (showHow ? '' : ' hidden') + '>' + how + '</span></div>' +
+      '<div class="app-prompt-btns"><button type="button" class="app-prompt-go" data-ap="' + (showHow ? 'no">Got it' : 'go">Download') + '</button>' +
         '<button type="button" class="app-prompt-no" data-ap="no">Not now</button></div>' +
       '<button type="button" class="app-prompt-x" data-ap="no" aria-label="Close">✕</button>';
     document.body.appendChild(t);
-    void t.offsetWidth; // start from the hidden position, then slide up
+    void t.offsetWidth; // start from the hidden position, then slide in
     t.classList.add('is-in');
     t.addEventListener('click', async function (e) {
       var b = e.target.closest('[data-ap]'); if (!b) return;
-      if (b.dataset.ap === 'no') { hideAppPrompt(); return; }
-      if (installEvt) {
-        var ev = installEvt; installEvt = null;
-        ev.prompt();
-        try { var choice = await ev.userChoice; if (choice && choice.outcome === 'accepted') hideAppPrompt(); } catch (err) {}
-      } else {
+      if (b.dataset.ap === 'no') { writeJSON('sessionStorage', APP_DISMISS_KEY, true); hideAppPrompt(); return; }
+      if (!(await installApp())) {
         t.querySelector('.app-prompt-how').hidden = false; // browser can't install by itself: show how
         b.textContent = 'Got it'; b.dataset.ap = 'no';
       }
     });
   }
+  // side menu "Download app": open the browser's install window, or show the steps
+  async function menuDownload() { if (!(await installApp())) showAppPrompt('top', true); }
+  // customers: show the message at the top shortly after the site opens (not again after "Not now" in this visit)
+  renderMenuApp();
+  setTimeout(function () {
+    if (!isOwner && !readJSON('sessionStorage', APP_DISMISS_KEY) && !readJSON('localStorage', 'a2a-app-installed')) showAppPrompt('top');
+  }, 1500);
   async function signOut() {
     hideAppPrompt();
     setDash(false);

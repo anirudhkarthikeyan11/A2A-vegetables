@@ -1138,3 +1138,6 @@ html.tab-hidden .blob, html.tab-hidden .animate-ping { animation-play-state: pau
   font-size: .8rem; color: #1f4f26; background: linear-gradient(145deg, #e6f5da, #c6e6b1);
   box-shadow: 3px 4px 8px -3px rgba(31, 79, 38, .4), inset -2px -2px 5px rgba(70, 135, 60, .25), inset 2px 2px 5px rgba(255, 255, 255, .8); }
 @media (prefers-reduced-motion: reduce) { .app-prompt { transition: opacity .2s ease; transform: translate3d(-50%, 0, 0); } }
+/* customers: the download message drops in at the top */
+.app-prompt.app-prompt-top { bottom: auto; top: max(.75rem, env(safe-area-inset-top)); transform: translate3d(-50%, -130%, 0) scale(.96); }
+.app-prompt.app-prompt-top.is-in { transform: translate3d(-50%, 0, 0) scale(1); }

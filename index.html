@@ -15,7 +15,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#2f6a3f">
   <link rel="apple-touch-icon" href="assets/img/app-icon-192.png">
-  <meta name="apple-mobile-web-app-title" content="A2A Veg">
+  <meta name="apple-mobile-web-app-title" content="A2A Vegetables">
   <link rel="preload" as="image" href="assets/img/a2a_logo_circle.png?v=2">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Manrope:wght@400;500;600;700&display=swap"></noscript>
   <link rel="stylesheet" href="assets/styles.css">
   <!-- Change the ?v= number after editing these files so browsers fetch the new version -->
-  <link rel="stylesheet" href="assets/custom.css?v=60">
+  <link rel="stylesheet" href="assets/custom.css?v=61">
 </head>
 <body>
 <div class="relative min-h-screen">
@@ -167,6 +167,7 @@
       <a href="#why" class="side-item" data-sm="go"><span class="side-ic">🌿</span>Why us</a>
       <a href="#visit" class="side-item" data-sm="go"><span class="side-ic">📍</span>Visit us</a>
       <button type="button" class="side-item" data-sm="basket"><span class="side-ic">🧺</span>My basket<span id="sideCount" class="side-count" hidden>0</span></button>
+      <button type="button" id="sideApp" class="side-item" data-sm="app"><span class="side-ic">📲</span>Download app</button>
 
       <p class="side-label">Shop owner</p>
       <div id="sideOwner"></div>
@@ -342,9 +343,9 @@
     </aside>
   </div>
 </div>
-<script src="assets/config.js?v=60"></script>
+<script src="assets/config.js?v=61"></script>
 <!-- the Supabase library is only downloaded when Supabase is set up in config.js (saves ~30 KB and a blocking request) -->
 <script>if (window.A2A_CONFIG && A2A_CONFIG.supabaseUrl && A2A_CONFIG.supabaseAnonKey) document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"><\/script>');</script>
-<script src="assets/app.js?v=60"></script>
+<script src="assets/app.js?v=61"></script>
 </body>
 </html>
