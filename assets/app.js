@@ -280,6 +280,7 @@
       msg.textContent = '';
       setOwnerLogin(false);
       openDash();
+      setTimeout(showAppPrompt, 900); // owner only: offer to download the app
     } catch (err) {
       fail('Could not reach the server. Check your internet connection.');
     } finally { btn.disabled = false; }
@@ -293,7 +294,54 @@
     }
     renderMenuAuth();
   }
+  // ---------- "Download the app" message: only for the shop owner, right after a correct login ----------
+  var installEvt = null;
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault(); // no browser install banner for customers; the owner gets our own message instead
+    installEvt = e;
+  });
+  window.addEventListener('appinstalled', function () { writeJSON('localStorage', 'a2a-app-installed', true); hideAppPrompt(); });
+  function appAlreadyOpen() {
+    return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  }
+  function hideAppPrompt() {
+    var t = $('appPrompt'); if (!t) return;
+    t.classList.remove('is-in');
+    setTimeout(function () { if (t.parentNode && !t.classList.contains('is-in')) t.remove(); }, 350);
+  }
+  function showAppPrompt() {
+    if (!isOwner || appAlreadyOpen() || $('appPrompt')) return;
+    var ua = navigator.userAgent;
+    var iOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var how = iOS ? 'In Safari, tap the Share button <b>⬆</b> and then <b>Add to Home Screen</b>.'
+      : 'Open the browser menu <b>⋮</b> and choose <b>Install app</b> or <b>Add to Home screen</b>.';
+    var t = document.createElement('div');
+    t.id = 'appPrompt'; t.className = 'app-prompt'; t.setAttribute('role', 'dialog'); t.setAttribute('aria-label', 'Download the A2A app');
+    t.innerHTML =
+      '<img src="assets/img/app-icon-192.png" alt="" class="app-prompt-icon" width="48" height="48">' +
+      '<div class="app-prompt-text"><b>Download the A2A app</b><span>Open your shop dashboard in one tap, right from your home screen.</span>' +
+        '<span class="app-prompt-how" hidden>' + how + '</span></div>' +
+      '<div class="app-prompt-btns"><button type="button" class="app-prompt-go" data-ap="go">Download</button>' +
+        '<button type="button" class="app-prompt-no" data-ap="no">Not now</button></div>' +
+      '<button type="button" class="app-prompt-x" data-ap="no" aria-label="Close">✕</button>';
+    document.body.appendChild(t);
+    void t.offsetWidth; // start from the hidden position, then slide up
+    t.classList.add('is-in');
+    t.addEventListener('click', async function (e) {
+      var b = e.target.closest('[data-ap]'); if (!b) return;
+      if (b.dataset.ap === 'no') { hideAppPrompt(); return; }
+      if (installEvt) {
+        var ev = installEvt; installEvt = null;
+        ev.prompt();
+        try { var choice = await ev.userChoice; if (choice && choice.outcome === 'accepted') hideAppPrompt(); } catch (err) {}
+      } else {
+        t.querySelector('.app-prompt-how').hidden = false; // browser can't install by itself: show how
+        b.textContent = 'Got it'; b.dataset.ap = 'no';
+      }
+    });
+  }
   async function signOut() {
+    hideAppPrompt();
     setDash(false);
     removeKey('sessionStorage', LOCAL_SESSION_KEY);
     if (sb) await sb.auth.signOut();
