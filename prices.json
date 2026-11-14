@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-12T12:28:08.594Z",
+  "updated": "2026-11-14T13:09:54.703Z",
   "veggies": [
     {
       "name": "Tomato",
@@ -26,24 +26,24 @@
     {
       "name": "Potato",
       "local": "ഉരുളക്കിഴങ്ങ്",
-      "price": 40,
+      "price": 70,
       "unit": "kg",
       "cat": "staples",
       "img": "assets/img/potato.jpg",
       "desc": "Firm potatoes brushed clean, no green patches. Boils dry for fries, holds shape in sambar.",
       "available": true,
-      "updated": "2026-11-11T11:46:11.081Z"
+      "updated": "2026-11-14T13:09:54.698Z"
     },
     {
       "name": "Green Chilli",
       "local": "പച്ചമുളക്",
-      "price": 90,
+      "price": 60,
       "unit": "kg",
       "cat": "staples",
       "img": "assets/img/green-chilli.jpg",
       "desc": "Thin, sharp chillies picked this morning. A little goes a long way in the tempering.",
       "available": true,
-      "updated": "2026-11-12T12:28:08.567Z"
+      "updated": "2026-11-14T13:09:54.698Z"
     },
     {
       "name": "Brinjal",
@@ -59,13 +59,13 @@
     {
       "name": "Cucumber",
       "local": "വെള്ളരിക്ക",
-      "price": 40,
+      "price": 50,
       "unit": "kg",
       "cat": "staples",
       "img": "assets/img/cucumber-pile.png",
       "desc": "Cool, watery cucumbers for pachadi, raita and the salad box. Sold by weight.",
       "available": true,
-      "updated": "2026-11-11T11:53:30.268Z"
+      "updated": "2026-11-14T13:09:54.698Z"
     },
     {
       "name": "Capsicum",
@@ -92,24 +92,24 @@
     {
       "name": "Cabbage",
       "local": "മുട്ടക്കോസ്",
-      "price": 35,
+      "price": 50,
       "unit": "piece",
       "cat": "greens",
       "img": "assets/img/cabbage-field.jpg",
       "desc": "Tight, heavy heads that feel solid in the hand. Crisp for poriyal, soft for a slow curry.",
       "available": true,
-      "updated": null
+      "updated": "2026-11-14T13:09:54.698Z"
     },
     {
       "name": "Coriander",
       "local": "മല്ലിയില",
-      "price": 15,
+      "price": 140,
       "unit": "bunch",
       "cat": "greens",
       "img": "assets/img/coriander.jpg",
       "desc": "Fragrant coriander bunches, stems on. Wash, dry and chill to keep the leaves perky.",
       "available": true,
-      "updated": null
+      "updated": "2026-11-14T13:09:54.698Z"
     },
     {
       "name": "Green Mango",
@@ -125,46 +125,46 @@
     {
       "name": "Carrot",
       "local": "കാരറ്റ്",
-      "price": 45,
+      "price": 50,
       "unit": "kg",
       "cat": "roots",
       "img": "assets/img/carrot.jpg",
       "desc": "Snappy carrots with a bright core. Sweet enough to eat raw, firm enough to grate.",
       "available": true,
-      "updated": null
+      "updated": "2026-11-14T13:09:54.698Z"
     },
     {
       "name": "Beetroot",
       "local": "ബീറ്റ്റൂട്ട്",
-      "price": 40,
+      "price": 80,
       "unit": "kg",
       "cat": "roots",
       "img": "assets/img/beetroot-cut.jpg",
       "desc": "Deep-red beetroots with clean rings. Roast or boil — the skin slips right off.",
       "available": true,
-      "updated": null
+      "updated": "2026-11-14T13:09:54.698Z"
     },
     {
       "name": "Garlic",
       "local": "വെളുത്തുള്ളി",
-      "price": 120,
+      "price": 300,
       "unit": "kg",
       "cat": "roots",
       "img": "assets/img/garlic-bulbs.png",
       "desc": "Plump, dry bulbs sold by weight so you get exactly the pods you need.",
       "available": true,
-      "updated": null
+      "updated": "2026-11-14T13:09:54.698Z"
     },
     {
       "name": "Ginger",
       "local": "ഇഞ്ചി",
-      "price": 90,
+      "price": 200,
       "unit": "kg",
       "cat": "roots",
       "img": "assets/img/ginger-root.jpg",
       "desc": "Fresh ginger with a juicy snap. Grate it for chai, slice it for the tempering.",
       "available": true,
-      "updated": null
+      "updated": "2026-11-14T13:09:54.698Z"
     },
     {
       "name": "Broccoli",
@@ -180,24 +180,24 @@
     {
       "name": "Drumstick",
       "local": "മുരിങ്ങക്കായ",
-      "price": 60,
+      "price": 130,
       "unit": "kg",
       "cat": "roots",
       "img": "assets/img/drumstick-bunch.jpg",
       "desc": "Long drumsticks with fat seeds inside — the classic sambar stick.",
       "available": true,
-      "updated": null
+      "updated": "2026-11-14T13:09:54.698Z"
     },
     {
       "name": "Mushroom",
       "local": "കൂൺ",
-      "price": 90,
+      "price": 70,
       "unit": "250 g",
       "cat": "exotic",
       "img": "assets/img/mushroom-board.jpg",
       "desc": "Button mushrooms in clean, dry trays. Ready for the masala, no washing needed.",
       "available": true,
-      "updated": null
+      "updated": "2026-11-14T13:09:54.698Z"
     }
   ]
 }
